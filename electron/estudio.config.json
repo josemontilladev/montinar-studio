@@ -1,0 +1,11 @@
+{
+  "nombreApp": "Montinar Studio",
+  "appId": "dev.montinar.studio",
+  "puerto": 4410,
+  "actualizaciones": {
+    "proveedor": "github",
+    "owner": "josemontilladev",
+    "repo": "montinar-studio"
+  },
+  "web": "https://montinar.dev"
+}

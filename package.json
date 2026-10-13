@@ -1,0 +1,133 @@
+{
+  "name": "montinar-studio",
+  "version": "1.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Editor de vídeo en tiempo real para proyectos Remotion con proyecto.json",
+  "scripts": {
+    "dev": "tsx servidor/index.ts",
+    "start": "tsx servidor/index.ts",
+    "typecheck": "tsc --noEmit -p .",
+    "app": "npm run build:server && electron .",
+    "build:server": "esbuild servidor/index.ts --bundle --platform=node --format=esm --target=node20 --packages=external --outfile=dist-server/index.mjs",
+    "dist": "npm run chrome && npm run build:server && electron-builder --win nsis portable --publish never",
+    "release": "npm run chrome && npm run build:server && electron-builder --win nsis portable --publish always",
+    "chrome": "node herramientas/preparar-chrome.mjs",
+    "dist:firmado": "npm run dist"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@remotion/bundler": "^4.0.535",
+    "@remotion/google-fonts": "4.0.535",
+    "@remotion/media-utils": "4.0.535",
+    "@remotion/paths": "4.0.535",
+    "@remotion/player": "4.0.535",
+    "@remotion/renderer": "^4.0.535",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron-updater": "^6.8.9",
+    "express": "^5.3.0",
+    "immer": "^11.1.21",
+    "lucide-react": "^1.55.0",
+    "puppeteer-core": "^25.13.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "remotion": "4.0.535",
+    "vite": "^8.3.4",
+    "zod": "^4.5.4",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "electron": true,
+    "electron-winstaller": true
+  },
+  "productName": "Montinar Studio",
+  "author": {
+    "name": "Montinar",
+    "url": "https://montinar.dev"
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "dev.montinar.studio",
+    "productName": "Montinar Studio",
+    "copyright": "Montinar",
+    "directories": {
+      "output": "dist-app",
+      "buildResources": "build"
+    },
+    "asar": false,
+    "files": [
+      "electron/**",
+      "dist-server/**",
+      "servidor/**",
+      "app/**",
+      "contrato/**",
+      "herramientas/**",
+      "recursos/**",
+      "marcas/**",
+      "build/icon.*",
+      "LEEME.md",
+      "LICENCIAS-FUENTES.md",
+      "LICENCIAS-MUSICA-Y-MODELOS.md",
+      "editor.config.json",
+      "package.json",
+      "node_modules/**",
+      "!node_modules/.remotion/**",
+      "!node_modules/.vite/**",
+      "!**/*.map",
+      "!.cache/**"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico",
+      "executableName": "Montinar Studio",
+      "signtoolOptions": {
+        "signingHashAlgorithms": [
+          "sha256"
+        ],
+        "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+      }
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": false,
+      "createDesktopShortcut": "always",
+      "createStartMenuShortcut": true,
+      "shortcutName": "Montinar Studio",
+      "artifactName": "Montinar Studio Setup ${version}.exe",
+      "deleteAppDataOnUninstall": false
+    },
+    "portable": {
+      "artifactName": "Montinar Studio ${version} portable.exe"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "josemontilladev",
+        "repo": "montinar-studio",
+        "private": false,
+        "releaseType": "release"
+      }
+    ]
+  },
+  "homepage": "https://montinar.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/josemontilladev/montinar-studio.git"
+  }
+}

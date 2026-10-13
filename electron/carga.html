@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cargando</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #0e0f13; color: #e8e8ec; font: 13px 'Segoe UI', system-ui, sans-serif; overflow: hidden; user-select: none; -webkit-app-region: drag; }
+      .caja { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: radial-gradient(60% 50% at 50% 20%, rgba(34, 211, 230, 0.22), transparent 70%); }
+      img { width: 96px; height: 96px; }
+      h1 { margin: 0; font-size: 22px; letter-spacing: -0.02em; }
+      .barra { width: 220px; height: 4px; border-radius: 3px; background: #26262e; overflow: hidden; }
+      .barra i { display: block; width: 40%; height: 100%; background: #22d3e6; border-radius: 3px; animation: ir 1.1s ease-in-out infinite; }
+      @keyframes ir { 0% { transform: translateX(-100%); } 100% { transform: translateX(260%); } }
+      p { margin: 0; color: #8b8b96; font-size: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="caja">
+      <img src="../build/icon.png" alt="" />
+      <h1 id="nombre">Montinar Studio</h1>
+      <div class="barra"><i></i></div>
+      <p>Abriendo el proyecto y preparando la vista previa…</p>
+    </div>
+    <script>
+      const n = new URLSearchParams(location.search).get('nombre');
+      if (n) document.getElementById('nombre').textContent = n;
+    </script>
+  </body>
+</html>

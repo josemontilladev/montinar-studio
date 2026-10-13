@@ -1,0 +1,42 @@
+# Dependencias y salidas de compilación
+node_modules/
+dist-app/
+dist-act/
+dist-server/
+*.blockmap
+
+# Navegador incluido en la app (≈ 280 MB): se descarga con `npm run chrome`
+recursos/chrome-headless-shell/
+
+# Cachés, modelos de IA descargados y datos de usuario (en desarrollo los datos viven en esta carpeta)
+.cache/
+modelos/
+marcas/
+biblioteca/
+copias/
+papelera/
+recientes.json
+preferencias.json
+estilos-usuario.json
+actualizaciones.json
+migracion.log
+.migracion.json
+
+# Salidas de pruebas y archivos del sistema
+out/
+capturas/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Nunca: secretos y certificados
+.env
+.env.*
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Notas internas de trabajo (mencionan proyectos de clientes)
+PROGRESO.md

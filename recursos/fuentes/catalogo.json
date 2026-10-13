@@ -1,0 +1,1422 @@
+[
+ {
+  "id": "inter",
+  "familia": "Inter",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v20",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "inter/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "inter/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "roboto",
+  "familia": "Roboto",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v51",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "roboto/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "roboto/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "open-sans",
+  "familia": "Open Sans",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v44",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "open-sans/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "open-sans/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "montserrat",
+  "familia": "Montserrat",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v31",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "montserrat/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "montserrat/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "poppins",
+  "familia": "Poppins",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "poppins/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "poppins/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "lato",
+  "familia": "Lato",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "lato/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "lato/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "nunito",
+  "familia": "Nunito",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v32",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "nunito/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "nunito/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "raleway",
+  "familia": "Raleway",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v37",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "raleway/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "raleway/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "work-sans",
+  "familia": "Work Sans",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "work-sans/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "work-sans/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "dm-sans",
+  "familia": "DM Sans",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "dm-sans/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "dm-sans/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "manrope",
+  "familia": "Manrope",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v20",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "manrope/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "manrope/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "outfit",
+  "familia": "Outfit",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v15",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "outfit/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "outfit/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "plus-jakarta-sans",
+  "familia": "Plus Jakarta Sans",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v12",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "plus-jakarta-sans/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "plus-jakarta-sans/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "rubik",
+  "familia": "Rubik",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v31",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "rubik/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "rubik/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "space-grotesk",
+  "familia": "Space Grotesk",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v22",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "space-grotesk/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "space-grotesk/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "sora",
+  "familia": "Sora",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "sora/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "sora/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "urbanist",
+  "familia": "Urbanist",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v18",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "urbanist/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "urbanist/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "figtree",
+  "familia": "Figtree",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v9",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "figtree/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "figtree/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "karla",
+  "familia": "Karla",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v33",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "karla/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "karla/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "mulish",
+  "familia": "Mulish",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v18",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "mulish/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "mulish/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "archivo",
+  "familia": "Archivo",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "archivo/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "archivo/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "lexend",
+  "familia": "Lexend",
+  "categoria": "Sans",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v26",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "lexend/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "lexend/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "playfair-display",
+  "familia": "Playfair Display",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v40",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "playfair-display/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "playfair-display/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "merriweather",
+  "familia": "Merriweather",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v33",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "merriweather/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "merriweather/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "lora",
+  "familia": "Lora",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v37",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "lora/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "lora/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "dm-serif-display",
+  "familia": "DM Serif Display",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "dm-serif-display/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "libre-baskerville",
+  "familia": "Libre Baskerville",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "libre-baskerville/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "libre-baskerville/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "cormorant-garamond",
+  "familia": "Cormorant Garamond",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v21",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "cormorant-garamond/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "cormorant-garamond/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "eb-garamond",
+  "familia": "EB Garamond",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v33",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "eb-garamond/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "eb-garamond/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "crimson-pro",
+  "familia": "Crimson Pro",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v28",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "crimson-pro/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "crimson-pro/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "fraunces",
+  "familia": "Fraunces",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v38",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "fraunces/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "fraunces/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "instrument-serif",
+  "familia": "Instrument Serif",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v5",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "instrument-serif/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "bitter",
+  "familia": "Bitter",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v42",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "bitter/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "bitter/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "noto-serif",
+  "familia": "Noto Serif",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v33",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "noto-serif/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "noto-serif/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "young-serif",
+  "familia": "Young Serif",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v2",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "young-serif/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "gloock",
+  "familia": "Gloock",
+  "categoria": "Serif",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v8",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "gloock/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "bebas-neue",
+  "familia": "Bebas Neue",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v16",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "bebas-neue/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "anton",
+  "familia": "Anton",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v27",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "anton/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "archivo-black",
+  "familia": "Archivo Black",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v23",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "archivo-black/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "righteous",
+  "familia": "Righteous",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v18",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "righteous/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "bungee",
+  "familia": "Bungee",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "bungee/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "alfa-slab-one",
+  "familia": "Alfa Slab One",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v21",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "alfa-slab-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "lobster",
+  "familia": "Lobster",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v32",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "lobster/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "abril-fatface",
+  "familia": "Abril Fatface",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "abril-fatface/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "black-ops-one",
+  "familia": "Black Ops One",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v21",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "black-ops-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "monoton",
+  "familia": "Monoton",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v22",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "monoton/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "bowlby-one",
+  "familia": "Bowlby One",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "bowlby-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "titan-one",
+  "familia": "Titan One",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "titan-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "rubik-mono-one",
+  "familia": "Rubik Mono One",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v20",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "rubik-mono-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "shrikhand",
+  "familia": "Shrikhand",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "shrikhand/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "fredoka",
+  "familia": "Fredoka",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "fredoka/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "fredoka/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "syne",
+  "familia": "Syne",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "syne/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "syne/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "bricolage-grotesque",
+  "familia": "Bricolage Grotesque",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v9",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "bricolage-grotesque/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "bricolage-grotesque/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "unbounded",
+  "familia": "Unbounded",
+  "categoria": "Display",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v12",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "unbounded/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "unbounded/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "pacifico",
+  "familia": "Pacifico",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v23",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "pacifico/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "dancing-script",
+  "familia": "Dancing Script",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v29",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "dancing-script/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "dancing-script/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "caveat",
+  "familia": "Caveat",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v23",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "caveat/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "caveat/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "satisfy",
+  "familia": "Satisfy",
+  "categoria": "Manuscrita",
+  "licencia": "Apache-2.0",
+  "origen": "https://github.com/google/fonts",
+  "version": "v22",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "satisfy/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "great-vibes",
+  "familia": "Great Vibes",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v21",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "great-vibes/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "kalam",
+  "familia": "Kalam",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v18",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "kalam/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "kalam/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "permanent-marker",
+  "familia": "Permanent Marker",
+  "categoria": "Manuscrita",
+  "licencia": "Apache-2.0",
+  "origen": "https://github.com/google/fonts",
+  "version": "v16",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "permanent-marker/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "shadows-into-light",
+  "familia": "Shadows Into Light",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v22",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "shadows-into-light/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "indie-flower",
+  "familia": "Indie Flower",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "indie-flower/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "sacramento",
+  "familia": "Sacramento",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "sacramento/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "amatic-sc",
+  "familia": "Amatic SC",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v28",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "amatic-sc/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "amatic-sc/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "homemade-apple",
+  "familia": "Homemade Apple",
+  "categoria": "Manuscrita",
+  "licencia": "Apache-2.0",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "homemade-apple/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "yellowtail",
+  "familia": "Yellowtail",
+  "categoria": "Manuscrita",
+  "licencia": "Apache-2.0",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "yellowtail/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "patrick-hand",
+  "familia": "Patrick Hand",
+  "categoria": "Manuscrita",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v25",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "patrick-hand/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "jetbrains-mono",
+  "familia": "JetBrains Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v24",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "jetbrains-mono/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "jetbrains-mono/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "fira-code",
+  "familia": "Fira Code",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v27",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "fira-code/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "fira-code/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "space-mono",
+  "familia": "Space Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v17",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "space-mono/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "space-mono/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "ibm-plex-mono",
+  "familia": "IBM Plex Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v20",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "ibm-plex-mono/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "ibm-plex-mono/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "roboto-mono",
+  "familia": "Roboto Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v31",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "roboto-mono/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "roboto-mono/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "source-code-pro",
+  "familia": "Source Code Pro",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v32",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "source-code-pro/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "source-code-pro/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "geist-mono",
+  "familia": "Geist Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v6",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "geist-mono/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "geist-mono/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "dm-mono",
+  "familia": "DM Mono",
+  "categoria": "Mono",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v16",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "dm-mono/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "oswald",
+  "familia": "Oswald",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v57",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "oswald/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "oswald/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "barlow-condensed",
+  "familia": "Barlow Condensed",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v13",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "barlow-condensed/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "barlow-condensed/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "roboto-condensed",
+  "familia": "Roboto Condensed",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v31",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "roboto-condensed/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "roboto-condensed/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "fjalla-one",
+  "familia": "Fjalla One",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v16",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "fjalla-one/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "saira-condensed",
+  "familia": "Saira Condensed",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v12",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "saira-condensed/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "saira-condensed/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "teko",
+  "familia": "Teko",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v23",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "teko/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "teko/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "big-shoulders-display",
+  "familia": "Big Shoulders Display",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v21",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "big-shoulders-display/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "big-shoulders-display/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "antonio",
+  "familia": "Antonio",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v22",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "antonio/400.woff2"
+   },
+   {
+    "peso": 700,
+    "archivo": "antonio/700.woff2"
+   }
+  ]
+ },
+ {
+  "id": "league-gothic",
+  "familia": "League Gothic",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v13",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "league-gothic/400.woff2"
+   }
+  ]
+ },
+ {
+  "id": "pathway-gothic-one",
+  "familia": "Pathway Gothic One",
+  "categoria": "Condensada",
+  "licencia": "OFL-1.1",
+  "origen": "https://github.com/google/fonts",
+  "version": "v16",
+  "archivos": [
+   {
+    "peso": 400,
+    "archivo": "pathway-gothic-one/400.woff2"
+   }
+  ]
+ }
+]
