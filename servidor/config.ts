@@ -33,7 +33,7 @@ const leerConfig = (): { proyecto?: string; puerto?: number } => {
 
 const cfg = leerConfig();
 export const PUERTO = Number(arg('--puerto') ?? process.env.PORT ?? cfg.puerto ?? 4400);
-export const PROY = path.resolve(EDITOR, arg('--proyecto') ?? process.env.PROYECTO ?? cfg.proyecto ?? '../montilla-video');
+export const PROY = path.resolve(EDITOR, arg('--proyecto') ?? process.env.PROYECTO ?? cfg.proyecto ?? '../metricaseo-promo/editables/promo-agencias-16x9');
 
 const porDefecto: Descriptor = {
   nombre: path.basename(PROY),

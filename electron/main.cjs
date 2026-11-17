@@ -73,7 +73,7 @@ const recordar = (p) => {
 const esProyecto = (dir) => fs.existsSync(path.join(dir, 'editor.json')) || fs.existsSync(path.join(dir, 'proyecto.json'));
 const proyectoInicial = () => {
   const arg = process.argv.find((a, i) => process.argv[i - 1] === '--proyecto');
-  for (const c of [arg, ...leerRecientes(), CONF.proyectoPorDefecto, path.resolve(RAIZ, '..', 'montilla-video')]) if (c && fs.existsSync(c) && esProyecto(c)) return c;
+  for (const c of [arg, ...leerRecientes(), CONF.proyectoPorDefecto, path.resolve(RAIZ, '..', 'metricaseo-promo', 'editables', 'promo-agencias-16x9')]) if (c && fs.existsSync(c) && esProyecto(c)) return c;
   return null;
 };
 

@@ -1,5 +1,12 @@
 # Montinar Studio: editor de vídeo para proyectos Remotion
 
+> **Copia para MétricaSEO** (17 nov 2026), traída de `stack web\proyectos\editor-video`. Abre por defecto
+> `../metricaseo-promo/editables/promo-agencias-16x9`; cada pieza del kit (21 videos y 24 posts) es un proyecto en
+> `../metricaseo-promo/editables/<id>`. Atajo: `..\Editor de video.cmd [id]`. Cambios respecto al original: Remotion
+> 4.0.543 (la del kit), Vite también sirve la carpeta raíz del código del proyecto (`../../src`) y el proyecto por
+> defecto. Detalles en `../metricaseo-promo/README.md` (sección «editar los videos y los posts»).
+
+
 Editor local, en tiempo real, para los vídeos que hacemos con Remotion. El vídeo entero se describe en un
 `proyecto.json`; el editor lo enseña en un reproductor (`@remotion/player`) y cada cambio se ve al instante, sin
 renderizar. Exporta con `@remotion/renderer` en segundo plano. Primer proyecto: `../montilla-video`.

@@ -1,7 +1,7 @@
 /**
  * Servidor del editor: API de archivos (proyecto.json + versiones, medios, ondas), trabajos largos (voz, exportar)
  * y la interfaz (Vite en modo middleware, con el proyecto Remotion enlazado como «@proyecto»).
- *   npm run dev                      → http://localhost:4400 (proyecto ../montilla-video)
+ *   npm run dev                      → http://localhost:4400 (proyecto ../metricaseo-promo/editables/promo-agencias-16x9)
  *   npm run dev -- --proyecto ../otro --puerto 4401
  */
 import fs from 'node:fs';
@@ -602,7 +602,7 @@ const vite = await createVite({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-dom/client', 'remotion', '@remotion/player', '@remotion/paths', 'zod', 'zustand', 'immer'],
   },
-  server: { middlewareMode: true, hmr: { server: srv }, fs: { allow: [EDITOR, PROY] } },
+  server: { middlewareMode: true, hmr: { server: srv }, fs: { allow: [EDITOR, PROY, path.resolve(path.dirname(rutas.entrada), '..'), rutas.publico] } },
   appType: 'spa',
   logLevel: 'info',
   cacheDir: path.join(rutas.cache, 'vite'),
