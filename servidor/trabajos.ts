@@ -254,7 +254,7 @@ export const renderizar = (req: PeticionRender) => {
   fs.writeFileSync(props, JSON.stringify({ proyecto: req.proyecto, formato: req.formato, encuadre: req.encuadre ?? 'adaptar', sinSubtitulos: sub === 'aparte', portada: req.portada ?? null }));
   const conf = {
     proyecto: PROY,
-    entrada: path.join(PROY, DESC.remotionEntrada),
+    entrada: path.resolve(PROY, DESC.remotionEntrada),
     publico: rutas.publico,
     composicion: DESC.composicion,
     props,

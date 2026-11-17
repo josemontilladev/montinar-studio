@@ -71,13 +71,13 @@ export function CapaUi() {
   return (
     <>
       {pregunta ? <Preguntar p={pregunta} /> : null}
-      <div className="toast toast-end toast-bottom z-[100]" data-avisos>
+      <div className="toast toast-end toast-bottom pointer-events-none z-[100]" data-avisos>
         {avisos.map((a) => (
           <div key={a.id} className={`alert min-w-72 max-w-md border bg-base-100 py-2.5 text-xs shadow-2xl ${a.tipo === 'error' ? 'border-error/50' : a.tipo === 'ok' ? 'border-success/40' : 'border-base-300'}`} data-aviso={a.tipo}>
             {a.tipo === 'ok' ? <CheckCircle2 className="size-4 text-success" /> : a.tipo === 'error' ? <XCircle className="size-4 text-error" /> : <Info className="size-4 text-info" />}
             <span className="whitespace-normal">{a.texto}</span>
             {a.accion ? (
-              <button type="button" className="btn btn-xs btn-primary gap-1" onClick={a.accion.fn} data-accion-aviso>
+              <button type="button" className="btn btn-xs btn-primary pointer-events-auto gap-1" onClick={a.accion.fn} data-accion-aviso>
                 <FolderOpen className="size-3.5" />
                 {a.accion.texto}
               </button>

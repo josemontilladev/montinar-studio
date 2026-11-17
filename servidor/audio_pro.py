@@ -22,12 +22,13 @@ FF = conf.get('ffmpeg', 'ffmpeg')
 SR = 48000
 
 
-def leer(f, sr=SR):
-    out = subprocess.run([FF, '-v', 'error', '-i', f, '-vn', '-ac', '1', '-ar', str(sr), '-c:a', 'pcm_s16le', '-f', 'wav', '-'], capture_output=True).stdout
+def leer(f, sr=SR, canales=1):
+    out = subprocess.run([FF, '-v', 'error', '-i', f, '-vn', '-ac', str(canales), '-ar', str(sr), '-c:a', 'pcm_s16le', '-f', 'wav', '-'], capture_output=True).stdout
     k = out.find(b'data')
     raw = out[k + 8:] if k >= 0 else out[44:]
-    raw = raw[: len(raw) // 2 * 2]
-    return np.frombuffer(raw, dtype=np.int16).astype(np.float64) / 32768
+    raw = raw[: len(raw) // (2 * canales) * 2 * canales]
+    x = np.frombuffer(raw, dtype=np.int16).astype(np.float64) / 32768
+    return x if canales == 1 else x.reshape(-1, canales).T
 
 
 def escribir(f, x, sr=SR, canales=2):
@@ -56,11 +57,12 @@ def lufs(x, sr=SR):
     K = np.tan(np.pi * f0 / sr)
     b2 = [1, -2, 1]
     a2 = [1, 2 * (K * K - 1) / (1 + K / Q + K * K), (1 - K / Q + K * K) / (1 + K / Q + K * K)]
-    y = signal.lfilter(b2, a2, signal.lfilter(b1, a1, x))
+    # x: mono (n,) o canales (c, n); la norma SUMA la potencia de cada canal (mezclar a mono antes resta ~3 dB en estéreo)
+    y = np.atleast_2d(signal.lfilter(b2, a2, signal.lfilter(b1, a1, x)))
     n, h = int(0.4 * sr), int(0.1 * sr)
-    if len(y) < n:
+    if y.shape[1] < n:
         return -70.0
-    ms = np.array([np.mean(y[i:i + n] ** 2) for i in range(0, len(y) - n + 1, h)])
+    ms = np.array([np.mean(y[:, i:i + n] ** 2, axis=1).sum() for i in range(0, y.shape[1] - n + 1, h)])
     l = -0.691 + 10 * np.log10(ms + 1e-12)
     ms = ms[l > -70]
     if not len(ms):
@@ -192,7 +194,7 @@ elif acc == 'ritmo':
     bpm, beats = ritmo(x)
     res = {'bpm': bpm, 'beats': beats}
 elif acc == 'lufs':
-    x = leer(conf['entrada'])
+    x = leer(conf['entrada'], canales=2)
     res = {'lufs': round(lufs(x), 2), 'pico': round(20 * np.log10(np.max(np.abs(x)) + 1e-12), 2)}
 elif acc == 'sfx':
     res = {'archivos': sfx(conf['carpeta'])}

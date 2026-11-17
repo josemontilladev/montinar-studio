@@ -57,11 +57,11 @@ export const DESC: Descriptor = (() => {
 if (arg('--archivo')) DESC.proyecto = arg('--archivo')!;
 
 export const rutas = {
-  proyecto: path.join(PROY, DESC.proyecto),
-  publico: path.join(PROY, DESC.publico),
-  salidas: path.join(PROY, DESC.salidas),
-  versiones: path.join(PROY, '.versiones'),
-  entrada: path.join(PROY, DESC.entrada),
+  proyecto: path.resolve(PROY, DESC.proyecto),
+  publico: path.resolve(PROY, DESC.publico),
+  salidas: path.resolve(PROY, DESC.salidas),
+  versiones: path.resolve(PROY, '.versiones'),
+  entrada: path.resolve(PROY, DESC.entrada),
   cache: path.join(DATOS, '.cache'),
   marcas: path.join(DATOS, 'marcas'),
   estilosUsuario: path.join(DATOS, 'estilos-usuario.json'),

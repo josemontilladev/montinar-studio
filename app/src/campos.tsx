@@ -26,8 +26,14 @@ export const Num: React.FC<{ v: number | undefined | null; on: (n: number) => vo
         style={ancho ? { width: ancho } : undefined}
         onChange={(e) => {
           setT(e.target.value);
+          // solo lo que ya está en rango: recortar «1» al mínimo mientras se escribe «150» reescribiría el campo
           const n = Number(e.target.value);
-          if (e.target.value !== '' && Number.isFinite(n)) on(min != null ? Math.max(min, max != null ? Math.min(max, n) : n) : max != null ? Math.min(max, n) : n);
+          if (e.target.value !== '' && Number.isFinite(n) && n >= (min ?? -Infinity) && n <= (max ?? Infinity)) on(n);
+        }}
+        onBlur={() => {
+          const n = Number(t);
+          if (t !== '' && Number.isFinite(n) && (n < (min ?? -Infinity) || n > (max ?? Infinity))) on(Math.min(max ?? n, Math.max(min ?? n, n)));
+          setT(v == null ? '' : String(Math.round(v * 1000) / 1000));
         }}
       />
       {suf && <span>{suf}</span>}

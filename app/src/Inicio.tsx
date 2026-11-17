@@ -291,6 +291,7 @@ export const Inicio: React.FC = () => {
                           const n = await pedirTexto('Renombrar proyecto', 'Nombre', x.nombre);
                           if (!n) return;
                           await post('/api/inicio/renombrar', { ruta: x.ruta, nombre: n });
+                          if (x.actual) useEd.getState().editar('Renombrar proyecto', (d) => void (d.nombre = n));
                           cargar();
                         }}
                       >

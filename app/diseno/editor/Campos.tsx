@@ -40,10 +40,16 @@ export function NumberField({ label, value, onChange, step = 1, min, max, suffix
           data-campo={label}
           onChange={(e) => {
             setDraft(e.target.value);
+            // mientras se escribe solo se aplica lo que ya está en rango: «132» pasa por «1» y «13», y recortarlos al
+            // mínimo reescribiría el campo (salía 432); fuera de rango se recorta al salir del campo
             const v = Number.parseFloat(e.target.value);
-            if (Number.isFinite(v)) onChange(Math.min(max ?? v, Math.max(min ?? v, v)));
+            if (Number.isFinite(v) && v >= (min ?? -Infinity) && v <= (max ?? Infinity)) onChange(v);
           }}
-          onBlur={() => setDraft(shown)}
+          onBlur={() => {
+            const v = Number.parseFloat(draft);
+            if (Number.isFinite(v) && (v < (min ?? -Infinity) || v > (max ?? Infinity))) onChange(Math.min(max ?? v, Math.max(min ?? v, v)));
+            setDraft(shown);
+          }}
           className={`input input-xs w-full bg-panel3 text-xs tabular-nums ${suffix ? 'pr-6' : ''}`}
         />
         {suffix ? <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[0.65rem] text-base-content/50">{suffix}</span> : null}

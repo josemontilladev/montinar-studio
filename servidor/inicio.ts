@@ -75,6 +75,33 @@ const copiarProyecto = (de: string, a: string, soloEsqueleto = false) => {
   if (fs.existsSync(nm) && !fs.existsSync(path.join(a, 'node_modules'))) fs.symlinkSync(fs.realpathSync(nm), path.join(a, 'node_modules'), 'junction');
 };
 
+/**
+ * editor.json de una copia en otra carpeta: las rutas relativas que salen del proyecto (código Remotion, public y
+ * script de voz compartidos, p. ej. «../../src/editor.ts» en los editables del kit) se resuelven contra el original,
+ * porque desde la carpeta nueva ya no apuntan a nada. Las salidas pasan a la copia y, si public es compartido, la voz
+ * regenerada va a su propia carpeta (no pisa los archivos de trabajo del original).
+ */
+const descriptorCopia = (desc: any, de: string, a: string) => {
+  const fuera = (p: unknown): p is string => typeof p === 'string' && !path.isAbsolute(p) && /^\.\.([\\/]|$)/.test(path.relative(de, path.resolve(de, p)));
+  const abs = (p: unknown) => (fuera(p) ? path.resolve(de, p) : p);
+  const r = { ...desc };
+  for (const k of ['entrada', 'remotionEntrada', 'publico']) if (r[k] != null) r[k] = abs(r[k]);
+  if (fuera(r.salidas)) r.salidas = 'out/editor';
+  if (r.voz) {
+    const comando = (r.voz.comando ?? []).map((x: string) => (fuera(x) && fs.existsSync(path.resolve(de, x)) ? path.resolve(de, x) : x));
+    const carpeta = fuera(desc.publico) && r.voz.carpeta ? path.posix.join(path.posix.dirname(r.voz.carpeta), path.basename(a)) : r.voz.carpeta;
+    r.voz = { ...r.voz, comando, ...(carpeta ? { carpeta } : {}) };
+  }
+  return r;
+};
+
+/** El nombre también va en proyecto.json: es el que enseña (y deja editar) la barra de título del editor. */
+const ponerNombre = (d: string, nombre: string) => {
+  const pj = path.join(d, leerJSON(path.join(d, 'editor.json'))?.proyecto ?? 'proyecto.json');
+  const p = leerJSON(pj);
+  if (p && typeof p === 'object' && 'nombre' in p) fs.writeFileSync(pj, JSON.stringify({ ...p, nombre }, null, 1) + '\n');
+};
+
 const moverA = (de: string, a: string) => {
   try {
     fs.renameSync(de, a);
@@ -107,7 +134,7 @@ export const registrarInicio = (app: express.Express, err: (res: express.Respons
       if (!conocido(d)) return err(res, 'Proyecto desconocido', 404);
       const desc = leerJSON(path.join(d, 'editor.json')) ?? {};
       const p = leerJSON(path.join(d, desc.proyecto ?? 'proyecto.json'));
-      const pub = path.join(d, desc.publico ?? 'public');
+      const pub = path.resolve(d, desc.publico ?? 'public');
       const toma = (p?.escenas ?? []).flatMap((e: any) => e.tomas ?? []).find((t: any) => /\.(mp4|webm|mov|png|jpe?g)$/i.test(t.src) && fs.existsSync(path.join(pub, t.src)));
       if (!toma) return err(res, 'Sin miniatura', 404);
       const abs = path.join(pub, toma.src);
@@ -134,7 +161,8 @@ export const registrarInicio = (app: express.Express, err: (res: express.Respons
       for (let k = 2; fs.existsSync(dest); k++) dest = path.join(CARPETA_PROYECTOS, `${path.basename(d)}-copia-${k}`);
       copiarProyecto(d, dest);
       const desc = leerJSON(path.join(dest, 'editor.json'));
-      if (desc) fs.writeFileSync(path.join(dest, 'editor.json'), JSON.stringify({ ...desc, nombre: `${desc.nombre ?? path.basename(d)} (copia)` }, null, 2));
+      if (desc) fs.writeFileSync(path.join(dest, 'editor.json'), JSON.stringify({ ...descriptorCopia(desc, d, dest), nombre: `${desc.nombre ?? path.basename(d)} (copia)` }, null, 2));
+      ponerNombre(dest, `${desc?.nombre ?? leerJSON(path.join(dest, 'proyecto.json'))?.nombre ?? path.basename(d)} (copia)`);
       guardarRecientes([dest, ...recientes()]);
       res.json({ ruta: dest });
     } catch (e) {
@@ -150,6 +178,8 @@ export const registrarInicio = (app: express.Express, err: (res: express.Respons
       const f = path.join(d, 'editor.json');
       const desc = leerJSON(f) ?? { proyecto: 'proyecto.json' };
       fs.writeFileSync(f, JSON.stringify({ ...desc, nombre }, null, 2));
+      // el abierto lo guarda el propio editor (cambia su nombre en memoria); si no, el autoguardado lo devolvería
+      if (path.resolve(d) !== path.resolve(PROY)) ponerNombre(d, nombre);
       res.json({ ok: true });
     } catch (e) {
       err(res, e);
