@@ -5,7 +5,7 @@ import {
   Type, Blend, Mic, Music, Volume2, Rows3, Captions, Scissors, Trash2, Copy, Magnet, Search, Plus, Minus, ArrowUpFromLine, History, Keyboard,
   Settings2, Video, X, FolderOpen, RefreshCw, Frame, MousePointer2, ChevronDown, ChevronUp, Diamond, RotateCcw, Lock, Unlock, Eye, EyeOff,
   VolumeX, MoreHorizontal, Menu, Sparkles, Wand2, SlidersHorizontal, Palette, Snowflake, BetweenHorizontalStart, ArrowLeftToLine, ArrowRightToLine,
-  Link2, LayoutGrid, List, Filter, Check, CircleCheck, Gauge, Clapperboard, Square, SquareSplitHorizontal, Download, Library, HardDrive, Sun,
+  Link2, LayoutGrid, List, Filter, Check, CircleCheck, Gauge, Clapperboard, Square, SquareSplitHorizontal, Download, Library, HardDrive, Sun, Moon,
   Focus, Zap, ScanSearch, AudioLines, Shapes, Stamp, Crop, Monitor, Minimize2, Star, ClipboardPaste, RotateCw, Paintbrush, Layers, CaseSensitive, Pencil,
 } from 'lucide-react';
 
@@ -82,6 +82,8 @@ const MAPA: Record<string, React.ComponentType<any>> = {
   biblioteca: Library,
   disco: HardDrive,
   luz: Sun,
+  sol: Sun,
+  luna: Moon,
   foco: Focus,
   rayo: Zap,
   revision: ScanSearch,

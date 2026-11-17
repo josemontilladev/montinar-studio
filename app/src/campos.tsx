@@ -76,7 +76,7 @@ export const ColorP: React.FC<{ v: string | undefined; on: (c: string | undefine
     <div>
       <div className="paleta">
         {ninguno && (
-          <span className={`muestra ${!v ? 'on' : ''}`} title="Ninguno" onClick={() => on(undefined)} style={{ background: 'linear-gradient(135deg, transparent 45%, #ff5d5d 45% 55%, transparent 55%), #222' }} />
+          <span className={`muestra ${!v ? 'on' : ''}`} title="Ninguno" onClick={() => on(undefined)} style={{ background: 'linear-gradient(135deg, transparent 45%, #ff5d5d 45% 55%, transparent 55%), var(--panel)' }} />
         )}
         {Object.entries(paleta).map(([k, c]) => (
           <span key={k} className={`muestra ${v === k ? 'on' : ''}`} title={`${k} · ${c}`} style={{ background: c }} onClick={() => on(k)} />

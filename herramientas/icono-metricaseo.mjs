@@ -1,5 +1,5 @@
-// Icono de MétricaSEO Studio: la marca (M trazada + punto menta) sobre una
-// pieza tinta plana (sin degradados, como la identidad de la marca).
+// Icono de MétricaSEO Studio: el mismo favicon de metricaseo.site (M trazada +
+// punto menta sobre la pieza tinta).
 //   node herramientas/icono-metricaseo.mjs [ruta-de-chrome]
 // Escribe build/icon.png (256), build/icon-512.png y build/icon.ico (16–256, con Python + Pillow).
 import { execFileSync } from 'node:child_process';
@@ -13,12 +13,12 @@ const CHROME =
   process.argv[2] ?? path.join(process.env.LOCALAPPDATA ?? '', 'ms-playwright', 'chromium-1234', 'chrome-win64', 'chrome.exe');
 const TAMANOS = [512, 256, 128, 64, 48, 32, 24, 16];
 
-const svg = (t) => `<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 100 100">
-  <rect x="4" y="4" width="92" height="92" rx="22" fill="#212121"/>
-  <rect x="4.5" y="4.5" width="91" height="91" rx="21.5" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
-  <g transform="translate(12.3 14) scale(2.95)">
-    <path d="M2.3 19.6V7.6l7.2 7.2 6.3-6.3" fill="none" stroke="#ffffff" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="21.2" cy="6.6" r="2.25" fill="#74f5a1"/>
+// El favicon oficial de metricaseo.site (metrica-seo/public/favicon.svg), tal cual.
+const svg = (t) => `<svg xmlns="http://www.w3.org/2000/svg" width="${t}" height="${t}" viewBox="0 0 48 48">
+  <rect width="48" height="48" rx="11" fill="#212121"/>
+  <g transform="translate(5.44 3.56) scale(0.78)">
+    <path d="M8 40 V18 L21 31 L32.37 19.63" fill="none" stroke="#FFFFFF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="38.23" cy="13.77" r="4.2" fill="#74F5A1"/>
   </g>
 </svg>`;
 

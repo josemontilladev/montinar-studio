@@ -136,14 +136,15 @@ export const registrarInicio = (app: express.Express, err: (res: express.Respons
       const p = leerJSON(path.join(d, desc.proyecto ?? 'proyecto.json'));
       const pub = path.resolve(d, desc.publico ?? 'public');
       const toma = (p?.escenas ?? []).flatMap((e: any) => e.tomas ?? []).find((t: any) => /\.(mp4|webm|mov|png|jpe?g)$/i.test(t.src) && fs.existsSync(path.join(pub, t.src)));
-      if (!toma) return err(res, 'Sin miniatura', 404);
+      // sin toma de vídeo o imagen: 204 (Inicio pinta una baldosa plana con la inicial; un 404 ensuciaría la consola)
+      if (!toma) return res.status(204).end();
       const abs = path.join(pub, toma.src);
       const dir = path.join(rutas.cache, 'inicio');
       fs.mkdirSync(dir, { recursive: true });
       const f = path.join(dir, `${nombreSeguro(d).slice(-50)}-${fs.statSync(abs).mtimeMs.toFixed(0)}.jpg`);
       if (fs.existsSync(f)) return res.sendFile(f, { dotfiles: 'allow' });
       execFile(FFMPEG, ['-v', 'error', '-ss', String(Math.max(0, (toma.t0 ?? 0) + 0.5)), '-i', abs, '-frames:v', '1', '-vf', 'scale=-2:360', '-q:v', '4', '-c:v', 'mjpeg', '-f', 'image2pipe', '-'], { encoding: 'buffer', windowsHide: true, maxBuffer: 1 << 22 }, (e, out) => {
-        if (e || !out.length) return err(res, 'Sin fotograma', 404);
+        if (e || !out.length) return res.status(204).end();
         fs.writeFileSync(f, out);
         res.type('jpg').send(out);
       });

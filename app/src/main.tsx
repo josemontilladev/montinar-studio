@@ -3,6 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import './estilos.css';
 import { irA, useEd } from './estado';
+import { iniciarTema } from '../marca/tema';
+
+// mismo tema que el estudio de diseño y metricaseo.site (claro / oscuro), antes del primer pintado
+iniciarTema();
 
 // acceso al estado desde la consola / pruebas automáticas
 (window as any).__ed = useEd;

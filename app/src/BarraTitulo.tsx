@@ -5,6 +5,18 @@ import { api } from './api';
 import { Ico } from './iconos';
 import { guardarAhora } from './guardado';
 import { buscarActualizaciones } from './Actualizacion';
+import { Logo } from '../marca/Logo';
+import { useTema } from '../marca/tema';
+
+/** Botón sol/luna: claro u oscuro, compartido con el estudio de diseño. */
+export const BotonTema: React.FC = () => {
+  const [tema, alternar] = useTema();
+  return (
+    <button className="btn icono chico plano tema" onClick={alternar} title={tema === 'oscuro' ? 'Tema claro' : 'Tema oscuro'} aria-label="Cambiar tema" data-tema>
+      <Ico n={tema === 'oscuro' ? 'sol' : 'luna'} s={15} />
+    </button>
+  );
+};
 
 /** Puente con la app de escritorio (preload de Electron); en el navegador no existe. */
 export const studio: undefined | { escritorio: true; accion: (a: string, x?: unknown) => Promise<any> } = (window as any).studio;
@@ -112,8 +124,7 @@ export const BarraTitulo: React.FC = () => {
   return (
     <header className={`titulo ${studio ? 'escritorio' : ''}`} data-prueba="titulo">
       <div className="marca">
-        <img src="/__studio/icon.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
-        MétricaSEO Studio
+        <Logo />
       </div>
       <button className="btn chico" style={{ marginLeft: 6 }} onClick={(e) => setMenu({ x: (e.currentTarget as HTMLElement).getBoundingClientRect().left, y: 36 })} data-prueba="menu-btn">
         Menú <Ico n="abajo" s={13} />
@@ -143,8 +154,12 @@ export const BarraTitulo: React.FC = () => {
         <button className="btn chico" onClick={() => dlg('atajos')} title="Atajos de teclado">
           <Ico n="teclado" s={14} /> Atajos
         </button>
-        <button className="btn chico prim" style={{ height: 28, padding: '0 14px' }} onClick={() => dlg('exportar')} data-prueba="exportar">
-          <Ico n="exportar" s={15} /> Exportar
+        <BotonTema />
+        <button className="btn-marca" onClick={() => dlg('exportar')} data-prueba="exportar">
+          Exportar
+          <span className="btn-marca-ico">
+            <Ico n="exportar" s={13} />
+          </span>
         </button>
       </div>
       {menu && <MenuFlot x={menu.x} y={menu.y} items={items} cerrar={() => setMenu(null)} />}

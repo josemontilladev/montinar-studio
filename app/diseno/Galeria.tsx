@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Clapperboard, Copy, FolderOpen, MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { BotonTema } from './tema';
+import { Logo } from '../marca/Logo';
 import { FORMATOS } from './esquema';
 import { apiDisenos, urlRecurso, type FichaDiseno } from './api';
 import { avisar, Forma, pedirTexto } from './Dialogos';
@@ -36,7 +37,8 @@ export function Galeria({ onAbrir, onNuevo, onVideo }: { onAbrir: (id: string) =
   return (
     <div className="flex h-full flex-col" data-galeria onClick={() => setMenu(null)}>
       <header className="barra-app flex h-10 shrink-0 items-center gap-3 border-b border-base-300 bg-fondo px-4">
-        <img src="/__studio/icon.png" alt="" className="size-5" />
+        <Logo />
+        <span className="h-5 w-px bg-base-300" aria-hidden="true" />
         <h1 className="text-[0.95rem] font-semibold">Estudio de diseño</h1>
         <label className="input input-sm ml-4 flex w-72 items-center gap-2 bg-panel3">
           <Search className="size-3.5 text-base-content/45" />

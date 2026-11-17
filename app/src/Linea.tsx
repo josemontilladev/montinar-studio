@@ -31,7 +31,7 @@ export const useOndas = (src?: string | null) => {
   return p;
 };
 
-const Onda: React.FC<{ src?: string | null; ancho: number; alto: number; pxf: number; fps: number; desdeSeg?: number; color?: string; picosSeg: number }> = ({ src, ancho, alto, pxf, fps, desdeSeg = 0, color = 'rgba(160,210,255,.75)', picosSeg }) => {
+const Onda: React.FC<{ src?: string | null; ancho: number; alto: number; pxf: number; fps: number; desdeSeg?: number; color?: string; picosSeg: number }> = ({ src, ancho, alto, pxf, fps, desdeSeg = 0, color = 'rgba(255,255,255,.62)', picosSeg }) => {
   const picos = useOndas(src);
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
@@ -596,8 +596,8 @@ export const Linea: React.FC = () => {
                   return (
                     <div
                       key={`${t.escena}/${t.texto.id}`}
-                      className={`clip texto ${on ? 'on' : ''}`}
-                      style={{ left: X(t.inicio), width: Math.max(4, X(t.fin - t.inicio) - 1), top: 4 + k * H.lane, background: t.texto.tipo === 'nota' ? 'linear-gradient(180deg,#6d5a2a,#54451f)' : undefined }}
+                      className={`clip texto ${t.texto.tipo === 'nota' ? 'nota' : ''} ${on ? 'on' : ''}`}
+                      style={{ left: X(t.inicio), width: Math.max(4, X(t.fin - t.inicio) - 1), top: 4 + k * H.lane }}
                       onPointerDown={(e) => onTexto(e, t.escena, t.texto, 'mover')}
                       onContextMenu={(e) => (e.preventDefault(), menuTexto(e.clientX, e.clientY, t.escena, t.texto.id))}
                       title={`${limpio(t.texto.texto)}${anclado ? ' · anclado a palabra' : ''}`}
@@ -691,7 +691,7 @@ export const Linea: React.FC = () => {
               <div className="pista" style={{ height: H.musica }} onPointerDown={(e) => e.target === e.currentTarget && buscar(e)}>
                 {p.musica.src && (
                   <div className={`clip musica ${sel?.tipo === 'musica' ? 'on' : ''} ${faltan.has(p.musica.src) ? 'falta' : ''}`} style={{ left: 0, width: X(l.total) - 1 }} onPointerDown={(e) => (e.stopPropagation(), sel_({ tipo: 'musica' }))} data-prueba="musica">
-                    <Onda src={p.musica.src} ancho={X(l.total)} alto={H.musica - 8} pxf={pxf} fps={fps} desdeSeg={p.musica.inicio} color="rgba(214,170,255,.55)" picosSeg={picosSeg} />
+                    <Onda src={p.musica.src} ancho={X(l.total)} alto={H.musica - 8} pxf={pxf} fps={fps} desdeSeg={p.musica.inicio} color="rgba(255,255,255,.5)" picosSeg={picosSeg} />
                     <Envolvente p={p} l={l} pxf={pxf} alto={H.musica - 8} />
                     {p.musica.beats.map((b, i) => {
                       const f = (b - p.musica.inicio) * fps;
@@ -706,13 +706,13 @@ export const Linea: React.FC = () => {
               <div className="pista" style={{ height: H.sfx }} onPointerDown={(e) => e.target === e.currentTarget && buscar(e)}>
                 {l.sfx.map((s) => (
                   <div key={s.id} className={`clip sfx ${enSel({ tipo: 'sfx', id: s.id }) ? 'on' : ''} ${faltan.has(s.src) ? 'falta' : ''}`} style={{ left: X(s.inicio), width: Math.max(6, X(s.duracion) - 1) }} onPointerDown={(e) => onSfx(e, s.id)} title={`${s.id} · ${s.src}`}>
-                    <Onda src={s.src} ancho={Math.max(6, X(s.duracion))} alto={H.sfx - 8} pxf={pxf} fps={fps} color="rgba(255,190,170,.6)" picosSeg={picosSeg} />
+                    <Onda src={s.src} ancho={Math.max(6, X(s.duracion))} alto={H.sfx - 8} pxf={pxf} fps={fps} color="rgba(255,255,255,.55)" picosSeg={picosSeg} />
                     <div className="et">{s.src.split('/').pop()?.replace(/\.\w+$/, '')}</div>
                   </div>
                 ))}
               </div>
 
-              {guia != null && <div className="cabezal" style={{ left: X(guia), background: '#7c5cff', opacity: 0.9 }} />}
+              {guia != null && <div className="cabezal guia" style={{ left: X(guia) }} />}
               <Cabezal pxf={pxf} contenedor={pistas} />
             </div>
           </div>
@@ -765,7 +765,7 @@ const Envolvente: React.FC<{ p: TProyecto; l: TLinea; pxf: number; alto: number 
   for (let f = 0; f <= l.total; f += paso) pts.push(`${(f * pxf).toFixed(1)},${(alto - (volumenMusica(p, l, f) / max) * (alto - 4) - 2).toFixed(1)}`);
   return (
     <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-      <polyline points={pts.join(' ')} fill="none" stroke="#f3d27a" strokeWidth={1.5} />
+      <polyline points={pts.join(' ')} fill="none" stroke="var(--menta)" strokeWidth={1.5} />
     </svg>
   );
 };

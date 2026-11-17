@@ -392,7 +392,8 @@ const imgEscena = (e: TEscena | undefined, frameLocal: number, pre: number, fps:
   const t = Math.max(0, tTomaEn(e!, pre, fps, frameLocal));
   return `/api/miniatura?src=${encodeURIComponent(tk.src)}&t=${t.toFixed(2)}&h=180`;
 };
-const MUESTRA = 'linear-gradient(135deg, #f6d27a 0%, #ff8a5c 35%, #6b4bff 70%, #22d3e6 100%)';
+// Muestra para ver los filtros sin vídeo: franjas planas con los colores de la marca (sin degradado)
+const MUESTRA = 'linear-gradient(90deg, #212121 0 25%, #12a150 25% 50%, #74f5a1 50% 75%, #f3f3f3 75%)';
 /** Miniatura del fotograma actual de la escena objetivo (se actualiza al soltar el cursor, no a cada fotograma). */
 const useImgEscena = () => {
   const l = useEd((s) => s.linea)!;

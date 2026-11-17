@@ -4,7 +4,7 @@
  * - Archivo: Abrir proyecto…, Proyectos recientes, Guardar, Exportar, Abrir carpeta de salida, Dependencias.
  * - Una sola instancia; al salir se cierran el servidor y todos sus trabajos (render, voz, Python).
  */
-const { app, BrowserWindow, Menu, dialog, shell, nativeImage, ipcMain, Notification, desktopCapturer, session } = require('electron');
+const { app, BrowserWindow, Menu, dialog, shell, nativeImage, ipcMain, Notification, desktopCapturer, session, nativeTheme } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const net = require('node:net');
@@ -150,8 +150,15 @@ const arrancarServidor = async (dir) => {
 };
 
 // ——— ventanas ———
+// Fondo de las ventanas mientras cargan: el gris de metricaseo.site (o su modo oscuro).
+const fondoMarca = () => (nativeTheme.shouldUseDarkColors ? '#121212' : '#f3f3f3');
+// Botones de la ventana sobre la barra superior (blanca o casi negra, como la web).
+const barraMarca = () =>
+  nativeTheme.shouldUseDarkColors
+    ? { color: '#171717', symbolColor: '#f3f3f3', height: 40 }
+    : { color: '#ffffff', symbolColor: '#212121', height: 40 };
 const pantallaCarga = () => {
-  carga = new BrowserWindow({ width: 460, height: 300, frame: false, resizable: false, transparent: false, backgroundColor: '#0c0c0f', show: false, icon: ICONO, alwaysOnTop: true });
+  carga = new BrowserWindow({ width: 520, height: 320, frame: false, resizable: false, transparent: false, backgroundColor: fondoMarca(), show: false, icon: ICONO, alwaysOnTop: true });
   carga.loadFile(path.join(__dirname, 'carga.html'), { query: { nombre: NOMBRE } });
   carga.once('ready-to-show', () => carga.show());
 };
@@ -163,13 +170,13 @@ const abrirVentana = () => {
     minWidth: 1180,
     minHeight: 720,
     show: false,
-    backgroundColor: '#0c0c0f',
+    backgroundColor: fondoMarca(),
     title: NOMBRE,
     icon: ICONO,
     autoHideMenuBar: true,
     // barra de título propia (la del editor) con los botones nativos de la ventana superpuestos
     titleBarStyle: 'hidden',
-    titleBarOverlay: { color: '#0e0e10', symbolColor: '#ececf1', height: 40 },
+    titleBarOverlay: barraMarca(),
     webPreferences: { contextIsolation: true, sandbox: true, preload: path.join(__dirname, 'preload.cjs') },
   });
   ventana.loadURL(`http://127.0.0.1:${puerto}/`);
@@ -181,10 +188,8 @@ const abrirVentana = () => {
   });
   // cerrar: guardar lo pendiente y cerrar aunque la página pida confirmación (beforeunload)
   ventana.webContents.on('will-prevent-unload', (e) => e.preventDefault());
-  // fuera del estudio de diseño la barra vuelve a los colores oscuros del editor de vídeo
-  ventana.webContents.on('did-navigate', (_e, url) => {
-    if (!url.includes('/diseno')) ventana.setTitleBarOverlay?.({ color: '#0e0e10', symbolColor: '#ececf1', height: 40 });
-  });
+  // al cambiar de página, la barra toma el tema del sistema; cada página la ajusta luego al tema elegido
+  ventana.webContents.on('did-navigate', () => ventana.setTitleBarOverlay?.(barraMarca()));
   let cerrando = false;
   ventana.on('close', (e) => {
     if (cerrando) return;
@@ -320,8 +325,9 @@ ipcMain.handle('accion', async (_e, a, x) => {
   if (a === 'salir') return app.quit();
   // el estudio de diseño (tema claro u oscuro, como la web) pinta los botones de la ventana a juego
   if (a === 'barra-titulo') {
-    const color = typeof x?.color === 'string' ? x.color : '#0e0e10';
-    const simbolo = typeof x?.simbolo === 'string' ? x.simbolo : '#ececf1';
+    const base = barraMarca();
+    const color = typeof x?.color === 'string' ? x.color : base.color;
+    const simbolo = typeof x?.simbolo === 'string' ? x.simbolo : base.symbolColor;
     return ventana?.setTitleBarOverlay?.({ color, symbolColor: simbolo, height: 40 });
   }
   // progreso de las exportaciones en el icono de la barra de tareas (-1 = quitar)

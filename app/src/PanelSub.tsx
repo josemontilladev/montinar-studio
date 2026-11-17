@@ -15,7 +15,7 @@ const Muestra: React.FC<{ id: string }> = ({ id }) => {
   const w = ['Tu', 'web', 'vende'];
   const base: React.CSSProperties = { fontWeight: 700, fontSize: 12, display: 'inline-block', margin: '0 2px' };
   return (
-    <div style={{ height: 34, display: 'grid', placeItems: 'center', borderRadius: 6, background: 'linear-gradient(135deg,#3a3a48,#22222b)' }}>
+    <div style={{ height: 34, display: 'grid', placeItems: 'center', borderRadius: 6, background: '#1c1c1c' }}>
       <div style={{ padding: id === 'resaltado' || id === 'karaoke' ? '2px 6px' : 0, borderRadius: 6, background: id === 'resaltado' || id === 'karaoke' ? 'rgba(10,10,12,.85)' : 'transparent' }}>
         {w.map((x, i) =>
           id === 'resaltado' ? (

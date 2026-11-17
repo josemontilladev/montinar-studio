@@ -10,6 +10,8 @@ import { Ico } from './iconos';
 import { accion, enEscritorio } from './escritorio';
 import { pedirTexto } from './menus';
 import { InicioDisenos } from './InicioDisenos';
+import { Logo } from '../marca/Logo';
+import { BotonTema } from './BarraTitulo';
 
 type Proy = { ruta: string; nombre: string; mtime: number; escenas: number; duracion: number; formato: string; actual: boolean };
 type Papel = { nombre: string; ruta: string; mtime: number };
@@ -218,7 +220,8 @@ export const Inicio: React.FC = () => {
   return (
     <div className="inicio" data-prueba="inicio">
       <div className="inicio-cab">
-        <img src="/__studio/icon.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+        <Logo />
+        <span className="sep" />
         <h2>Inicio</h2>
         <div className="buscar" style={{ maxWidth: 360 }}>
           <Ico n="lupa" s={14} />
@@ -228,8 +231,12 @@ export const Inicio: React.FC = () => {
         <button className={`btn chico ${verPapelera ? 'activo' : ''}`} onClick={() => setVerPapelera(!verPapelera)} data-prueba="ver-papelera">
           <Ico n="papelera" s={14} /> Papelera ({datos?.papelera.length ?? 0})
         </button>
-        <button className="btn chico prim" onClick={cerrar} data-prueba="cerrar-inicio">
+        <BotonTema />
+        <button className="btn-marca" onClick={cerrar} data-prueba="cerrar-inicio">
           Volver al editor
+          <span className="btn-marca-ico">
+            <Ico n="adelante" s={13} />
+          </span>
         </button>
       </div>
       <div className="inicio-cuerpo">
@@ -239,7 +246,9 @@ export const Inicio: React.FC = () => {
         <div className="plantillas-proyecto">
           {PLANTILLAS_PROYECTO.map((pl) => (
             <button key={pl.id} className="plantilla-p" onClick={() => nuevo(pl.id)} data-plantilla-proyecto={pl.id}>
-              <div className="forma-p" style={{ aspectRatio: `${pl.ancho} / ${pl.alto}` }} />
+              <div className="caja-forma">
+                <div className="forma-p" style={{ aspectRatio: `${pl.ancho} / ${pl.alto}` }} />
+              </div>
               <b>{pl.nombre}</b>
               <span>{pl.desc}</span>
             </button>

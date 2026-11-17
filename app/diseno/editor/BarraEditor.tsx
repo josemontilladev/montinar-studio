@@ -1,6 +1,7 @@
 /** Barra superior del editor: volver, nombre, deshacer/rehacer, zoom, tamaño, imanes, guardado y descargar. */
 import { ArrowDown, ChevronLeft, Clapperboard, Cloud, CloudOff, Loader2, Magnet, Maximize, Redo2, Scaling, Undo2, ZoomIn, ZoomOut } from 'lucide-react';
 import { BotonTema } from '../tema';
+import { Logo } from '../../marca/Logo';
 import type { Zoom } from './Escenario';
 import type { EstadoGuardado } from './guardado';
 
@@ -30,6 +31,8 @@ export function BarraEditor(p: {
   const estado = { guardado: 'Guardado', pendiente: 'Cambios sin guardar', guardando: 'Guardando…', error: 'No se pudo guardar' }[p.estado];
   return (
     <header className="barra-app flex h-10 shrink-0 items-center gap-1 border-b border-base-300 bg-fondo px-2" data-barra-editor>
+      <Logo etiqueta="" className="mx-2" />
+      {sep}
       <button type="button" className="btn btn-ghost btn-sm gap-1" onClick={p.onVolver} title="Mis diseños" data-volver>
         <ChevronLeft className="size-4" /> Diseños
       </button>

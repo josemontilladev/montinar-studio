@@ -1,6 +1,6 @@
 {
   "name": "metricaseo-studio",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "type": "module",
   "description": "Editor de vídeo y estudio de diseño de MétricaSEO",
@@ -114,7 +114,15 @@
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "build/icon.ico",
       "uninstallerIcon": "build/icon.ico",
-      "uninstallDisplayName": "MétricaSEO Studio"
+      "uninstallDisplayName": "MétricaSEO Studio",
+      "installerSidebar": "build/installerSidebar.bmp",
+      "uninstallerSidebar": "build/uninstallerSidebar.bmp",
+      "installerHeader": "build/installerHeader.bmp",
+      "installerLanguages": [
+        "es_ES"
+      ],
+      "language": "3082",
+      "runAfterFinish": true
     },
     "publish": null
   },

@@ -1,0 +1,61 @@
+/* Logotipo de MétricaSEO (como .brand-logo de metricaseo.site). Solo las letras del logo: a c e i o r s t. */
+@font-face {
+  font-family: 'Poppins Logo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  src: url('./poppins-logo-v1.woff2') format('woff2');
+  unicode-range: U+61, U+63, U+65, U+69, U+6f, U+72-74;
+}
+.ms-logo {
+  --logo-tam: 1.3rem;
+  --logo-tinta: #212121;
+  --logo-verde: #12a150;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  font-size: calc(var(--logo-tam) * 0.8);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--logo-tinta);
+  -webkit-font-smoothing: antialiased;
+}
+[data-theme='estudio-oscuro'] .ms-logo {
+  --logo-tinta: #f3f3f3;
+  --logo-verde: #74f5a1;
+}
+.ms-logo-marca {
+  display: inline-flex;
+  align-items: baseline;
+}
+/* Sobre la línea base; el margen negativo mete la «e» bajo el punto, que el SVG dibuja fuera de su borde. */
+.ms-logo-m {
+  width: 1.033em;
+  height: 1.04em;
+  flex-shrink: 0;
+  overflow: visible;
+  margin-right: -0.27em;
+  color: var(--logo-tinta);
+}
+.ms-logo-punto {
+  fill: var(--logo-verde);
+}
+.ms-logo-palabra {
+  font-family: 'Poppins Logo', 'Poppins', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.ms-logo-seo {
+  color: var(--logo-verde);
+}
+.ms-logo-etiqueta {
+  font-family: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.66em;
+  letter-spacing: -0.01em;
+  padding: 0.28em 0.6em;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  opacity: 0.62;
+  transform: translateY(-0.12em);
+}

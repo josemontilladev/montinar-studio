@@ -198,7 +198,7 @@ const Instante: React.FC<{ v: TTiempo | null; on: (t: TTiempo | null) => void; e
         <span style={{ color: 'var(--tenue)', fontSize: 11 }}>ajuste</span>
         <Num v={a.frames} on={(n) => on({ ...a, frames: Math.round(n) })} suf="f" ancho={56} />
       </div>
-      {!existe && <div className="ayuda" style={{ color: '#ff9a9a' }}>La palabra no está en la frase actual: se usa el inicio de la frase.</div>}
+      {!existe && <div className="ayuda" style={{ color: 'var(--rojo-t)' }}>La palabra no está en la frase actual: se usa el inicio de la frase.</div>}
     </div>
   );
 };

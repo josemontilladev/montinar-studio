@@ -328,7 +328,7 @@ export const Visor: React.FC = () => {
             allowFullscreen
             acknowledgeRemotionLicense
             numberOfSharedAudioTags={20}
-            errorFallback={({ error }) => <div style={{ color: '#ff9a9a', padding: 20, fontSize: 14, background: '#1a0f0f', height: '100%' }}>Error en la vista previa: {error.message}</div>}
+            errorFallback={({ error }) => <div style={{ color: '#ff9a90', padding: 20, fontSize: 14, background: '#1c1c1c', height: '100%' }}>Error en la vista previa: {error.message}</div>}
           />
           {zonas && <Zonas p={proyecto} k={k} formato={formatoVista} w={cw} h={ch} />}
           {elegirPunto && <ElegirPunto k={k} cw={cw} ch={ch} />}

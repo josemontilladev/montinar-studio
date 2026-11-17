@@ -510,7 +510,8 @@ const Textos: React.FC = () => (
 );
 
 // ——— Plantillas ———
-const COLOR_CAT: Record<string, string> = { Gancho: '#22d3e6', Producto: '#8b7bff', Contenido: '#f3d27a', 'Prueba social': '#ff8a5c', Cierre: '#C8FF3B', Marca: '#ececf1', Básicas: '#a1a1ab', Proyecto: '#5aa6ff' };
+// tonos de la marca, legibles sobre la baldosa oscura de las fichas
+const COLOR_CAT: Record<string, string> = { Gancho: '#74f5a1', Producto: '#7aa7ff', Contenido: '#e0c48a', 'Prueba social': '#f0a58a', Cierre: '#74f5a1', Marca: '#f3f3f3', Básicas: '#a6a6a6', Proyecto: '#9fb3cc' };
 const Plantillas: React.FC<{ sub: string }> = ({ sub }) => {
   const todas = PLANTILLAS as any[];
   const lista = todas.filter((p) => (sub === 'todas' ? true : sub === 'basicas' ? p.generica && !p.kit : sub === 'proyecto' ? !p.generica : p.kit && p.categoria === sub));
@@ -559,16 +560,16 @@ const Efectos: React.FC = () => {
   const edEsc = (e: TEscena, fn: (x: any) => void) => useEd.getState().editar('efecto', (d) => fn(d.escenas.find((x) => x.id === e.id)!));
   const fps = useEd((s) => s.proyecto!.ajustes.fps);
   const fichas: { id: string; t: string; d: string; ico: string; color: string; fn: () => void }[] = [
-    { id: 'luz-calida', t: 'Luz cálida', d: 'Destellos suaves naranjas', ico: 'luz', color: '#ff9a3c', fn: () => ef('Luz cálida', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'calida' }))) },
-    { id: 'luz-fria', t: 'Luz fría', d: 'Destellos azules y violetas', ico: 'luz', color: '#5aa6ff', fn: () => ef('Luz fría', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'fria' }))) },
-    { id: 'luz-neon', t: 'Neón', d: 'Ácido y violeta de marca', ico: 'rayo', color: '#C8FF3B', fn: () => ef('Neón', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'neon' }))) },
-    { id: 'sin-luz', t: 'Sin destellos', d: 'Quita la luz de la escena', ico: 'cerrar', color: '#a1a1ab', fn: () => ef('Sin destellos', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'ninguna' }))) },
+    { id: 'luz-calida', t: 'Luz cálida', d: 'Destellos suaves naranjas', ico: 'luz', color: '#e0b070', fn: () => ef('Luz cálida', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'calida' }))) },
+    { id: 'luz-fria', t: 'Luz fría', d: 'Destellos azules y violetas', ico: 'luz', color: '#7aa7ff', fn: () => ef('Luz fría', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'fria' }))) },
+    { id: 'luz-neon', t: 'Neón', d: 'Ácido y violeta de marca', ico: 'rayo', color: '#74f5a1', fn: () => ef('Neón', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'neon' }))) },
+    { id: 'sin-luz', t: 'Sin destellos', d: 'Quita la luz de la escena', ico: 'cerrar', color: '#a6a6a6', fn: () => ef('Sin destellos', (e) => edEsc(e, (x) => (x.efectos = { ...x.efectos, luz: 'ninguna' }))) },
     {
       id: 'ken',
       t: 'Ken Burns',
       d: 'Acercamiento lento continuo',
       ico: 'foco',
-      color: '#22d3e6',
+      color: '#74f5a1',
       fn: () =>
         ef('Ken Burns', (e) =>
           edEsc(e, (x) => {
@@ -579,13 +580,13 @@ const Efectos: React.FC = () => {
           }),
         ),
     },
-    { id: 'zoom-punto', t: 'Zoom a un punto', d: 'Clic en el visor sobre el punto', ico: 'lupa', color: '#22d3e6', fn: () => ef('Haz clic en el visor', (e) => useEd.setState({ elegirPunto: e.id })) },
+    { id: 'zoom-punto', t: 'Zoom a un punto', d: 'Clic en el visor sobre el punto', ico: 'lupa', color: '#74f5a1', fn: () => ef('Haz clic en el visor', (e) => useEd.setState({ elegirPunto: e.id })) },
     {
       id: 'zoom-golpe',
       t: 'Golpe de zoom',
       d: 'Zoom rápido en el cursor (muelle)',
       ico: 'rayo',
-      color: '#22d3e6',
+      color: '#74f5a1',
       fn: () =>
         ef('Golpe de zoom', (e) => {
           const s = useEd.getState();
@@ -594,13 +595,13 @@ const Efectos: React.FC = () => {
           edEsc(e, (x) => (x.camara = [...x.camara.filter((c: any) => c.f < f), ...clavesZoomPunto(f, 540, 900, 1080, 1920, fps, 1.18).map((c) => ({ ...c, curva: 'muelle' as const }))]));
         }),
     },
-    { id: 'sin-camara', t: 'Cámara fija', d: 'Quita el movimiento de cámara', ico: 'cuadro', color: '#a1a1ab', fn: () => ef('Cámara fija', (e) => edEsc(e, (x) => (x.camara = []))) },
+    { id: 'sin-camara', t: 'Cámara fija', d: 'Quita el movimiento de cámara', ico: 'cuadro', color: '#a6a6a6', fn: () => ef('Cámara fija', (e) => edEsc(e, (x) => (x.camara = []))) },
     {
       id: 'rampa',
       t: 'Rampa: acelerar',
       d: 'La toma va cada vez más rápido',
       ico: 'velocidad',
-      color: '#8b7bff',
+      color: '#7aa7ff',
       fn: () =>
         ef('Rampa', (e) => {
           const r = useEd.getState().linea!.escenas.find((x) => x.id === e.id)!;
@@ -615,7 +616,7 @@ const Efectos: React.FC = () => {
       t: 'Rampa: impulso',
       d: 'Acelera en el centro y vuelve',
       ico: 'velocidad',
-      color: '#8b7bff',
+      color: '#7aa7ff',
       fn: () =>
         ef('Impulso', (e) => {
           const r = useEd.getState().linea!.escenas.find((x) => x.id === e.id)!;
@@ -630,7 +631,7 @@ const Efectos: React.FC = () => {
       t: 'Texto con brillo',
       d: 'Resplandor en el texto seleccionado',
       ico: 'efectos',
-      color: '#C8FF3B',
+      color: '#74f5a1',
       fn: () => {
         const s = useEd.getState();
         if (s.sel?.tipo !== 'texto') return s.avisar('Selecciona un texto en la línea de tiempo');

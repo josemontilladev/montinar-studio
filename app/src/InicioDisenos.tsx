@@ -51,15 +51,19 @@ export const InicioDisenos: React.FC<{ q: string }> = ({ q }) => {
       </h4>
       <div className="plantillas-proyecto">
         <button className="plantilla-p" onClick={() => irADiseno('?nuevo=1')} data-nuevo-diseno>
-          <div className="forma-p" style={{ aspectRatio: '1 / 1', display: 'grid', placeItems: 'center', color: 'var(--acento-t)' }}>
-            <Ico n="mas" s={22} />
+          <div className="caja-forma">
+            <div className="forma-p accion">
+              <Ico n="mas" s={20} />
+            </div>
           </div>
           <b>Nuevo diseño</b>
           <span>Elige el formato o un tamaño a medida</span>
         </button>
         {FORMATOS.slice(0, 5).map((f) => (
           <button key={f.id} className="plantilla-p" onClick={() => irADiseno(`?nuevo=${f.id}`)} data-formato-diseno={f.id}>
-            <div className="forma-p" style={{ aspectRatio: `${f.ancho} / ${f.alto}` }} />
+            <div className="caja-forma">
+              <div className="forma-p" style={{ aspectRatio: `${f.ancho} / ${f.alto}` }} />
+            </div>
             <b>{f.nombre}</b>
             <span>
               {f.ancho} × {f.alto} · {f.desc}
@@ -67,8 +71,10 @@ export const InicioDisenos: React.FC<{ q: string }> = ({ q }) => {
           </button>
         ))}
         <button className="plantilla-p" onClick={() => irADiseno()} data-mis-disenos>
-          <div className="forma-p" style={{ aspectRatio: '1 / 1', display: 'grid', placeItems: 'center', color: 'var(--acento-t)' }}>
-            <Ico n="carpeta" s={22} />
+          <div className="caja-forma">
+            <div className="forma-p accion tinta">
+              <Ico n="carpeta" s={18} />
+            </div>
           </div>
           <b>Todos los diseños</b>
           <span>Abrir el estudio de diseño</span>
