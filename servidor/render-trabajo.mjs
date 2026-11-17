@@ -125,9 +125,13 @@ try {
           quitar('-preset');
           quitar('-x264-params');
           quitar('-x265-params');
+          // «Alta» pide un bitrate (-b:v): en VBR NVENC se queda muy por debajo con fondos planos (≈5 de 10 Mbps),
+          // así que con bitrate fijo va en CBR y entrega lo prometido.
+          const bv = a[a.indexOf('-b:v') + 1];
+          const tasa = a.includes('-b:v') && bv ? ['-rc', 'cbr', '-maxrate', bv, '-bufsize', `${parseInt(bv, 10) * 2}M`] : ['-rc', 'vbr'];
           const extra =
             conf.acel === 'nvenc'
-              ? ['-preset', 'p5', '-tune', 'hq', '-rc', 'vbr', ...(hevc ? [] : ['-profile:v', 'high']), ...(crf ? ['-cq', crf] : [])]
+              ? ['-preset', 'p5', '-tune', 'hq', ...tasa, ...(hevc ? [] : ['-profile:v', 'high']), ...(crf ? ['-cq', crf] : [])]
               : conf.acel === 'qsv'
                 ? ['-preset', 'slow', ...(crf ? ['-global_quality', crf] : [])]
                 : ['-quality', 'quality', ...(crf ? ['-rc', 'cqp', '-qp_i', crf, '-qp_p', crf] : [])];
