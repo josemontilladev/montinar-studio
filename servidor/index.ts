@@ -11,6 +11,7 @@ import { execFile, spawn as spawnHijo } from 'node:child_process';
 import express from 'express';
 import { createServer as createVite } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwind from '@tailwindcss/vite';
 import { validarProyecto } from '../contrato/esquema';
 import { contratoIgual, DATOS as DATOS_APP, DESC, EDITOR, FFMPEG, FFPROBE, PROY, PUERTO, rutas } from './config';
 import { revisarDependencias } from './dependencias';
@@ -18,6 +19,7 @@ import { generarProxy, pesado, registrarProxies } from './proxies';
 import { acelElegida, registrarGpu } from './gpu';
 import { registrarInicio } from './inicio';
 import { registrarCompartida } from './compartida';
+import { registrarDisenos } from './disenos';
 import { listarMedios, nombreSeguro, ondas, PICOS_SEG, rutaPublica } from './medios';
 import { trabajoNode, actualizar, archivarToma, cancelar, listar, mostrarEnCarpeta, nuevo, publico as publicoT, pythonJSON, regenerarVoz, renderizar, suscribir, trabajoPython } from './trabajos';
 
@@ -106,6 +108,7 @@ registrarProxies(app, err);
 registrarGpu(app, err);
 registrarInicio(app, err);
 registrarCompartida(app, err);
+registrarDisenos(app, err);
 
 // ——— Música libre (original de la app, CC0): se copia al proyecto al usarla ———
 app.post('/api/musica-libre/usar', (req, res) => {
@@ -586,6 +589,8 @@ app.post('/api/mostrar', (req, res) => {
 });
 
 app.use('/salidas', express.static(rutas.salidas));
+// estudio de diseño (segunda página de la interfaz)
+app.get(['/diseno', '/disenos'], (req, res) => res.redirect(`/diseno.html${req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''}`));
 app.get('/__studio/icon.png', (_req, res) => res.sendFile(path.join(EDITOR, 'build', 'icon.png')));
 
 // ——— Interfaz (Vite) ———
@@ -594,13 +599,14 @@ const vite = await createVite({
   configFile: false,
   root: path.join(EDITOR, 'app'),
   publicDir: rutas.publico,
-  plugins: [react()],
+  // Tailwind solo procesa los CSS que lo importan (app/diseno/estilos.css): el editor de vídeo no cambia
+  plugins: [react(), tailwind()],
   resolve: {
     alias: { '@proyecto': rutas.entrada, '@contrato': path.join(EDITOR, 'contrato') },
     dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/paths', '@remotion/media-utils', 'zod'],
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'react-dom/client', 'remotion', '@remotion/player', '@remotion/paths', 'zod', 'zustand', 'immer'],
+    include: ['react', 'react-dom', 'react-dom/client', 'remotion', '@remotion/player', '@remotion/paths', 'zod', 'zustand', 'immer', 'lucide-react', 'react-dom/server'],
   },
   server: { middlewareMode: true, hmr: { server: srv }, fs: { allow: [EDITOR, PROY, path.resolve(path.dirname(rutas.entrada), '..'), rutas.publico] } },
   appType: 'spa',

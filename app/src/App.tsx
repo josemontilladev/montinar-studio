@@ -158,6 +158,13 @@ export const App: React.FC = () => {
         const p = validarProyecto(crudo);
         useEd.getState().cargar(p);
         useEd.setState({ ultimoGuardado: est.mtime, sel: { tipo: 'proyecto' } });
+        // ?inicio=1 (p. ej. al volver desde el estudio de diseño): abrir Inicio y limpiar la URL
+        const u = new URL(location.href);
+        if (u.searchParams.get('inicio') === '1') {
+          useEd.setState({ dialogo: 'inicio' });
+          u.searchParams.delete('inicio');
+          history.replaceState(null, '', u.pathname + u.search + u.hash);
+        }
         iniciarGuardado(est.proyecto);
         // recuperación: si la sesión anterior no se cerró bien, se ofrece dejarlo todo como estaba
         const d = await leerDiario();

@@ -1,19 +1,17 @@
 {
-  "name": "montinar-studio",
-  "version": "1.2.0",
+  "name": "metricaseo-studio",
+  "version": "2.0.0",
   "private": true,
   "type": "module",
-  "description": "Editor de vídeo en tiempo real para proyectos Remotion con proyecto.json",
+  "description": "Editor de vídeo y estudio de diseño de MétricaSEO",
   "scripts": {
     "dev": "tsx servidor/index.ts",
     "start": "tsx servidor/index.ts",
     "typecheck": "tsc --noEmit -p .",
     "app": "npm run build:server && electron .",
     "build:server": "esbuild servidor/index.ts --bundle --platform=node --format=esm --target=node20 --packages=external --outfile=dist-server/index.mjs",
-    "dist": "npm run chrome && npm run build:server && electron-builder --win nsis portable --publish never",
-    "release": "npm run chrome && npm run build:server && electron-builder --win nsis portable --publish always",
-    "chrome": "node herramientas/preparar-chrome.mjs",
-    "dist:firmado": "npm run dist"
+    "dist": "npm run chrome && npm run build:server && electron-builder --win nsis --publish never",
+    "chrome": "node herramientas/preparar-chrome.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -23,7 +21,9 @@
     "@remotion/paths": "4.0.543",
     "@remotion/player": "4.0.543",
     "@remotion/renderer": "4.0.543",
+    "@tailwindcss/vite": "^4.3.5",
     "@vitejs/plugin-react": "^6.1.2",
+    "daisyui": "^5.8.1",
     "electron-updater": "^6.8.9",
     "express": "^5.3.0",
     "immer": "^11.1.21",
@@ -32,6 +32,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "remotion": "4.0.543",
+    "tailwindcss": "^4.3.5",
     "vite": "^8.3.4",
     "zod": "^4.5.4",
     "zustand": "^5.0.15"
@@ -52,18 +53,18 @@
     "electron": true,
     "electron-winstaller": true
   },
-  "productName": "Montinar Studio",
+  "productName": "MetricaSEO Studio",
   "author": {
-    "name": "Montinar",
-    "url": "https://montinar.dev"
+    "name": "MétricaSEO",
+    "url": "https://metricaseo.site"
   },
   "main": "electron/main.cjs",
   "build": {
-    "appId": "dev.montinar.studio",
-    "productName": "Montinar Studio",
-    "copyright": "Montinar",
+    "appId": "site.metricaseo.studio",
+    "productName": "MetricaSEO Studio",
+    "copyright": "MétricaSEO",
     "directories": {
-      "output": "dist-app",
+      "output": "C:/Users/KronnicxZ/Instaladores/MetricaSEO Studio",
       "buildResources": "build"
     },
     "asar": false,
@@ -90,11 +91,10 @@
     ],
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        "nsis"
       ],
       "icon": "build/icon.ico",
-      "executableName": "Montinar Studio",
+      "executableName": "MetricaSEO Studio",
       "signtoolOptions": {
         "signingHashAlgorithms": [
           "sha256"
@@ -103,31 +103,20 @@
       }
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
       "allowElevation": false,
       "createDesktopShortcut": "always",
       "createStartMenuShortcut": true,
-      "shortcutName": "Montinar Studio",
-      "artifactName": "Montinar Studio Setup ${version}.exe",
-      "deleteAppDataOnUninstall": false
+      "shortcutName": "MétricaSEO Studio",
+      "artifactName": "MetricaSEO Studio Setup ${version}.exe",
+      "deleteAppDataOnUninstall": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "MétricaSEO Studio"
     },
-    "portable": {
-      "artifactName": "Montinar Studio ${version} portable.exe"
-    },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "josemontilladev",
-        "repo": "montinar-studio",
-        "private": false,
-        "releaseType": "release"
-      }
-    ]
+    "publish": null
   },
-  "homepage": "https://montinar.dev",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/josemontilladev/montinar-studio.git"
-  }
+  "homepage": "https://metricaseo.site"
 }

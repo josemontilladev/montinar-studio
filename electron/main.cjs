@@ -19,19 +19,25 @@ const CONF = (() => {
     return {};
   }
 })();
-const NOMBRE = CONF.nombreApp || 'Montinar Studio';
-app.setName(NOMBRE);
+// nombreApp: carpeta de datos y proceso (sin tildes); titulo: lo que ve el usuario.
+const NOMBRE_APP = CONF.nombreApp || 'Montinar Studio';
+const NOMBRE = CONF.titulo || NOMBRE_APP;
+app.setName(NOMBRE_APP);
 app.setAppUserModelId(CONF.appId || 'dev.montinar.studio');
 
 const DATOS = app.getPath('userData');
-// primer arranque de Montinar Studio: copia los datos y proyectos de Montilla Studio (sin borrar los viejos)
+// Documentos\<app>: Videos (proyectos nuevos) y Diseños (estudio de diseño).
+const DOCS = path.join(process.env.STUDIO_DOCS ?? app.getPath('documents'), NOMBRE_APP);
+// Migración de datos de otra instalación solo si la configuración lo pide ("migrarDesde": nombre de la app vieja).
 const { migrar } = require('./migrar.cjs');
-const MIGRACION = migrar({
-  viejo: process.env.STUDIO_MIGRAR_DESDE ?? path.join(app.getPath('appData'), 'Montilla Studio'),
-  nuevo: DATOS,
-  docsViejo: path.join(process.env.STUDIO_DOCS ?? app.getPath('documents'), 'Montilla Studio'),
-  docsNuevo: path.join(process.env.STUDIO_DOCS ?? app.getPath('documents'), 'Montinar Studio'),
-});
+const MIGRACION = CONF.migrarDesde
+  ? migrar({
+      viejo: path.join(app.getPath('appData'), CONF.migrarDesde),
+      nuevo: DATOS,
+      docsViejo: path.join(app.getPath('documents'), CONF.migrarDesde),
+      docsNuevo: DOCS,
+    })
+  : null;
 const RECIENTES = path.join(DATOS, 'recientes.json');
 const ICONO = path.join(RAIZ, 'build', process.platform === 'win32' ? 'icon.ico' : 'icon.png');
 
@@ -117,7 +123,13 @@ const arrancarServidor = async (dir) => {
   const args = fs.existsSync(entrada) ? [entrada] : ['--import', 'tsx', path.join(RAIZ, 'servidor', 'index.ts')];
   servidor = spawn(process.execPath, [...args, '--proyecto', dir, '--puerto', String(puerto)], {
     cwd: RAIZ,
-    env: { ...process.env, ELECTRON_RUN_AS_NODE: '1', STUDIO_DATOS: DATOS, NODE_ENV: 'production' },
+    env: {
+      ...process.env,
+      ELECTRON_RUN_AS_NODE: '1',
+      STUDIO_DATOS: DATOS,
+      STUDIO_PROYECTOS: process.env.STUDIO_PROYECTOS ?? path.join(DOCS, 'Videos'),
+      NODE_ENV: 'production',
+    },
     windowsHide: true,
     detached: process.platform !== 'win32',
   });
@@ -192,6 +204,15 @@ const abrirVentana = () => {
 };
 
 const ejecutarEnEditor = (js) => ventana?.webContents.executeJavaScript(js).catch(() => {});
+// Inicio vive en el editor de vídeo: desde el estudio de diseño hay que volver a esa página primero.
+const irAInicio = async () => {
+  const url = ventana?.webContents.getURL() ?? '';
+  if (url.includes('/diseno')) {
+    await ventana.loadURL(`http://127.0.0.1:${puerto}/?inicio=1`);
+    return;
+  }
+  ejecutarEnEditor("window.__ed.setState({ dialogo: 'inicio' })");
+};
 
 const abrirProyecto = async (dir) => {
   if (!dir) {
@@ -219,7 +240,7 @@ const menu = () => {
     {
       label: 'Archivo',
       submenu: [
-        { label: 'Inicio (proyectos y plantillas)', accelerator: 'CmdOrCtrl+Shift+H', click: () => ejecutarEnEditor("window.__ed.setState({ dialogo: 'inicio' })") },
+        { label: 'Inicio (proyectos y plantillas)', accelerator: 'CmdOrCtrl+Shift+H', click: () => irAInicio() },
         { label: 'Abrir proyecto…', accelerator: 'CmdOrCtrl+O', click: () => abrirProyecto() },
         { label: 'Proyectos recientes', submenu: rec.length ? rec.map((p) => ({ label: p, click: () => abrirProyecto(p) })) : [{ label: '(ninguno)', enabled: false }] },
         { type: 'separator' },
@@ -231,6 +252,16 @@ const menu = () => {
         { label: 'Abrir carpeta del proyecto', click: () => shell.openPath(proyecto) },
         { type: 'separator' },
         { label: 'Salir', role: 'quit' },
+      ],
+    },
+    {
+      label: 'Diseños',
+      submenu: [
+        { label: 'Nuevo diseño…', accelerator: 'CmdOrCtrl+Shift+N', click: () => ejecutarEnEditor('window.__nuevoDiseno && window.__nuevoDiseno()') },
+        { label: 'Mis diseños', accelerator: 'CmdOrCtrl+Shift+D', click: () => ejecutarEnEditor('window.__abrirDisenos && window.__abrirDisenos()') },
+        { type: 'separator' },
+        { label: 'Abrir carpeta de diseños', click: () => { const d = path.join(DOCS, 'Diseños'); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
+        { label: 'Abrir carpeta de exportaciones', click: () => { const d = path.join(app.getPath('downloads'), NOMBRE_APP); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
       ],
     },
     {
@@ -267,7 +298,7 @@ const menu = () => {
         { label: 'Manual (LEEME)', click: () => shell.openPath(path.join(RAIZ, 'LEEME.md')) },
         { label: 'Registro del servidor', click: () => { const f = path.join(DATOS, 'registro.txt'); fs.writeFileSync(f, registro.join('')); shell.openPath(f); } },
         { type: 'separator' },
-        { label: `Acerca de ${NOMBRE}`, click: () => dialog.showMessageBox(ventana, { title: NOMBRE, message: NOMBRE, detail: `Versión ${app.getVersion()}\nEditor de vídeo para proyectos Remotion · montinar.dev\nProyecto: ${proyecto}\nDatos: ${DATOS}`, icon: nativeImage.createFromPath(path.join(RAIZ, 'build', 'icon.png')) }) },
+        { label: `Acerca de ${NOMBRE}`, click: () => dialog.showMessageBox(ventana, { title: NOMBRE, message: NOMBRE, detail: `Versión ${app.getVersion()}\nEditor de vídeo y estudio de diseño de MétricaSEO · metricaseo.site\nProyecto: ${proyecto}\nDatos: ${DATOS}`, icon: nativeImage.createFromPath(path.join(RAIZ, 'build', 'icon.png')) }) },
       ],
     },
   ];

@@ -12,9 +12,9 @@
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "types": ["node"],
     "paths": {
-      "@proyecto": ["../montilla-video/src/editor.ts"],
+      "@proyecto": ["../metricaseo-promo/src/editor.ts"],
       "@contrato/*": ["./contrato/*"]
     }
   },
-  "include": ["app/src", "contrato", "servidor"]
+  "include": ["app/src", "app/diseno", "contrato", "servidor"]
 }

@@ -113,7 +113,7 @@ export const BarraTitulo: React.FC = () => {
     <header className={`titulo ${studio ? 'escritorio' : ''}`} data-prueba="titulo">
       <div className="marca">
         <img src="/__studio/icon.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
-        Montinar Studio
+        MétricaSEO Studio
       </div>
       <button className="btn chico" style={{ marginLeft: 6 }} onClick={(e) => setMenu({ x: (e.currentTarget as HTMLElement).getBoundingClientRect().left, y: 36 })} data-prueba="menu-btn">
         Menú <Ico n="abajo" s={13} />

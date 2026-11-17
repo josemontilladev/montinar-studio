@@ -9,6 +9,7 @@ import { nid, useEd } from './estado';
 import { Ico } from './iconos';
 import { accion, enEscritorio } from './escritorio';
 import { pedirTexto } from './menus';
+import { InicioDisenos } from './InicioDisenos';
 
 type Proy = { ruta: string; nombre: string; mtime: number; escenas: number; duracion: number; formato: string; actual: boolean };
 type Papel = { nombre: string; ruta: string; mtime: number };
@@ -244,6 +245,7 @@ export const Inicio: React.FC = () => {
             </button>
           ))}
         </div>
+        {!verPapelera && <InicioDisenos q={q} />}
         {!verPapelera ? (
           <>
             <h4>

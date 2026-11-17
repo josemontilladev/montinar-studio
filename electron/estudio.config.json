@@ -1,11 +1,8 @@
 {
-  "nombreApp": "Montinar Studio",
-  "appId": "dev.montinar.studio",
+  "nombreApp": "MetricaSEO Studio",
+  "titulo": "MétricaSEO Studio",
+  "appId": "site.metricaseo.studio",
   "puerto": 4410,
-  "actualizaciones": {
-    "proveedor": "github",
-    "owner": "josemontilladev",
-    "repo": "montinar-studio"
-  },
-  "web": "https://montinar.dev"
+  "proyectoPorDefecto": "C:/Users/KronnicxZ/dev/Metrica SEO/metricaseo-promo/editables/promo-agencias-16x9",
+  "web": "https://metricaseo.site"
 }

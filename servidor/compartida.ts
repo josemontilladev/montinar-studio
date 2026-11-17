@@ -132,7 +132,7 @@ export const registrarCompartida = (app: express.Express, err: (res: express.Res
       fs.mkdirSync(rutas.cache, { recursive: true });
       const f = path.join(rutas.cache, `biblioteca-${sello()}.zip`);
       await zip(f);
-      res.download(f, `biblioteca-montinar-studio-${sello()}.zip`, { dotfiles: 'allow' }, () => fs.rmSync(f, { force: true }));
+      res.download(f, `biblioteca-metricaseo-studio-${sello()}.zip`, { dotfiles: 'allow' }, () => fs.rmSync(f, { force: true }));
     } catch (e) {
       err(res, e, 500);
     }
@@ -155,7 +155,7 @@ export const registrarCompartida = (app: express.Express, err: (res: express.Res
       // solo se aceptan entradas dentro de biblioteca/ y marcas/ (tar rechaza rutas con «..» y absolutas)
       const lista = await new Promise<string>((ok, ko) => execFile(TAR, ['-t', '-f', f], { windowsHide: true, maxBuffer: 1 << 24 }, (e, o) => (e ? ko(e) : ok(o))));
       const malas = lista.split(/\r?\n/).filter((x) => x && !/^(biblioteca|marcas)(\/|$)/.test(x.replace(/\\/g, '/')));
-      if (malas.length) throw new Error(`El .zip no es una biblioteca de Montinar Studio (${malas.slice(0, 3).join(', ')})`);
+      if (malas.length) throw new Error(`El .zip no es una biblioteca de MétricaSEO Studio (${malas.slice(0, 3).join(', ')})`);
       await new Promise<void>((ok, ko) => execFile(TAR, ['-x', '-f', f, '-C', DATOS], { windowsHide: true }, (e, _o, se) => (e ? ko(new Error(String(se || e.message))) : ok())));
       fs.rmSync(f, { force: true });
       res.json({ ok: true, copia });

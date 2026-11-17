@@ -1,0 +1,126 @@
+/* Estudio de diseño: Tailwind v4 + daisyUI 5 solo en esta página (diseno.html). El editor de vídeo usa app/src/estilos.css. */
+@import '@fontsource-variable/inter';
+@import 'tailwindcss' source('.');
+@plugin 'daisyui' {
+  themes: false;
+}
+@plugin 'daisyui/theme' {
+  name: 'estudio';
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #1b1b1e;
+  --color-base-200: #141416;
+  --color-base-300: #2b2b30;
+  --color-base-content: #ececf1;
+  --color-primary: #22d3e6;
+  --color-primary-content: #071417;
+  --color-secondary: #8b7bff;
+  --color-secondary-content: #0e0e10;
+  --color-accent: #74f5a1;
+  --color-accent-content: #212121;
+  --color-neutral: #2a2a2f;
+  --color-neutral-content: #ececf1;
+  --color-info: #5aa6ff;
+  --color-info-content: #0e0e10;
+  --color-success: #3ddc84;
+  --color-success-content: #0e0e10;
+  --color-warning: #ffb547;
+  --color-warning-content: #0e0e10;
+  --color-error: #ff5f5f;
+  --color-error-content: #0e0e10;
+  --radius-selector: 0.375rem;
+  --radius-field: 0.375rem;
+  --radius-box: 0.5rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+
+@theme {
+  --font-sans: 'Inter Variable', Inter, 'Segoe UI', system-ui, sans-serif;
+  --color-fondo: #0e0e10;
+  --color-panel2: #222226;
+  --color-panel3: #2a2a2f;
+  --color-borde2: #3a3a41;
+  --color-suave: #a1a1ab;
+  --color-tenue: #6f6f7a;
+}
+
+/* Fuentes de la marca para el contenido del lienzo (las mismas se incrustan al exportar) */
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400 700;
+  font-display: block;
+  src: url('./espejo/fuentes/inter-latin-v1.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400 700;
+  font-display: block;
+  src: url('./espejo/fuentes/inter-latin-ext-v1.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter Tight';
+  font-weight: 500 700;
+  font-display: block;
+  src: url('./espejo/fuentes/inter-tight-latin-v1.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter Tight';
+  font-weight: 500 700;
+  font-display: block;
+  src: url('./espejo/fuentes/inter-tight-latin-ext-v1.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+html,
+body,
+#raiz {
+  height: 100%;
+}
+body {
+  background: var(--color-fondo);
+  font-size: 12.5px;
+  overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+input,
+textarea {
+  user-select: text;
+}
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3a41;
+  border-radius: 9px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+.lienzo-fondo {
+  background-color: #0e0e10;
+}
+/* Barra superior: en la app de escritorio es la barra de título (se arrastra la ventana y deja sitio a sus botones) */
+.barra-app {
+  -webkit-app-region: drag;
+}
+.barra-app button,
+.barra-app input,
+.barra-app a,
+.barra-app label {
+  -webkit-app-region: no-drag;
+}
+.escritorio .barra-app {
+  padding-right: 146px;
+}

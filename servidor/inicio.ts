@@ -10,7 +10,7 @@ import type express from 'express';
 import { DATOS, FFMPEG, PROY, rutas } from './config';
 import { nombreSeguro } from './medios';
 
-export const CARPETA_PROYECTOS = process.env.STUDIO_PROYECTOS ?? path.join(os.homedir(), 'Documents', 'Montinar Studio');
+export const CARPETA_PROYECTOS = process.env.STUDIO_PROYECTOS ?? path.join(os.homedir(), 'Documents', 'MetricaSEO Studio', 'Videos');
 const PAPELERA = path.join(DATOS, 'papelera');
 const RECIENTES = path.join(DATOS, 'recientes.json');
 
