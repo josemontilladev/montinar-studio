@@ -181,6 +181,10 @@ const abrirVentana = () => {
   });
   // cerrar: guardar lo pendiente y cerrar aunque la página pida confirmación (beforeunload)
   ventana.webContents.on('will-prevent-unload', (e) => e.preventDefault());
+  // fuera del estudio de diseño la barra vuelve a los colores oscuros del editor de vídeo
+  ventana.webContents.on('did-navigate', (_e, url) => {
+    if (!url.includes('/diseno')) ventana.setTitleBarOverlay?.({ color: '#0e0e10', symbolColor: '#ececf1', height: 40 });
+  });
   let cerrando = false;
   ventana.on('close', (e) => {
     if (cerrando) return;
@@ -314,6 +318,12 @@ ipcMain.handle('accion', async (_e, a, x) => {
     return shell.openPath(d);
   }
   if (a === 'salir') return app.quit();
+  // el estudio de diseño (tema claro u oscuro, como la web) pinta los botones de la ventana a juego
+  if (a === 'barra-titulo') {
+    const color = typeof x?.color === 'string' ? x.color : '#0e0e10';
+    const simbolo = typeof x?.simbolo === 'string' ? x.simbolo : '#ececf1';
+    return ventana?.setTitleBarOverlay?.({ color, symbolColor: simbolo, height: 40 });
+  }
   // progreso de las exportaciones en el icono de la barra de tareas (-1 = quitar)
   if (a === 'progreso') return ventana?.setProgressBar(typeof x === 'number' && x >= 0 ? Math.max(0.01, x) : -1);
   // aviso de Windows al terminar; clic = abrir la carpeta con el archivo seleccionado

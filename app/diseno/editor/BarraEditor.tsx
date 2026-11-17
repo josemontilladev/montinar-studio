@@ -1,5 +1,6 @@
 /** Barra superior del editor: volver, nombre, deshacer/rehacer, zoom, tamaño, imanes, guardado y descargar. */
-import { ChevronLeft, Clapperboard, Cloud, CloudOff, Download, Loader2, Magnet, Maximize, Redo2, Scaling, Undo2, ZoomIn, ZoomOut } from 'lucide-react';
+import { ArrowDown, ChevronLeft, Clapperboard, Cloud, CloudOff, Loader2, Magnet, Maximize, Redo2, Scaling, Undo2, ZoomIn, ZoomOut } from 'lucide-react';
+import { BotonTema } from '../tema';
 import type { Zoom } from './Escenario';
 import type { EstadoGuardado } from './guardado';
 
@@ -79,8 +80,12 @@ export function BarraEditor(p: {
       <button type="button" className="btn btn-ghost btn-sm gap-1.5" onClick={p.onVideo} title="Volver a los proyectos de vídeo">
         <Clapperboard className="size-4" /> Vídeo
       </button>
-      <button type="button" className="btn btn-primary btn-sm gap-1.5" onClick={p.onExportar} data-abrir-exportar>
-        <Download className="size-4" /> Descargar
+      <BotonTema />
+      <button type="button" className="btn-marca ml-1" onClick={p.onExportar} data-abrir-exportar>
+        Descargar
+        <span className="btn-marca-ico">
+          <ArrowDown className="size-3.5" />
+        </span>
       </button>
     </header>
   );

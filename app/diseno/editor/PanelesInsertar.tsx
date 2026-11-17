@@ -94,7 +94,7 @@ export function PanelFondo({ pagina, onChange }: { pagina: Pagina; onChange: (p:
         <Titulo>Color de fondo</Titulo>
         <div className="grid grid-cols-5 gap-1.5">
           {PALETA.map((s) => (
-            <button key={s.color} type="button" title={s.name} data-fondo={s.color} onClick={() => onChange({ background: s.color, dotColor: undefined }, 'bg')} className={`aspect-square rounded-lg border border-white/10 transition hover:scale-105 ${pagina.background.toLowerCase() === s.color ? 'ring-2 ring-primary ring-offset-2 ring-offset-base-100' : ''}`} style={{ backgroundColor: s.color }} />
+            <button key={s.color} type="button" title={s.name} data-fondo={s.color} onClick={() => onChange({ background: s.color, dotColor: undefined }, 'bg')} className={`aspect-square rounded-lg border border-base-300 transition hover:scale-105 ${pagina.background.toLowerCase() === s.color ? 'ring-2 ring-primary ring-offset-2 ring-offset-base-100' : ''}`} style={{ backgroundColor: s.color }} />
           ))}
         </div>
         <ColorField label="Color personalizado" value={pagina.background} onChange={(background) => onChange({ background }, 'bg')} />

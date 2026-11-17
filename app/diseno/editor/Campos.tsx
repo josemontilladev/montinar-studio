@@ -92,7 +92,7 @@ export function ColorField({ label, value, onChange, onClear, clearLabel = 'Orig
             aria-label={`${label}: ${s.name}`}
             aria-pressed={cur === s.color.toLowerCase()}
             onClick={() => onChange(s.color)}
-            className={`size-6 rounded-full border border-white/15 transition hover:scale-110 ${cur === s.color.toLowerCase() ? 'ring-2 ring-primary ring-offset-1 ring-offset-base-100' : ''}`}
+            className={`size-6 rounded-full border border-base-300 transition hover:scale-110 ${cur === s.color.toLowerCase() ? 'ring-2 ring-primary ring-offset-1 ring-offset-base-100' : ''}`}
             style={{ backgroundColor: s.color }}
           />
         ))}

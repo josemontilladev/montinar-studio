@@ -33,7 +33,7 @@ export function Modal({ titulo, onCerrar, children, ancho = 'max-w-lg' }: { titu
         </div>
         <div className="p-5">{children}</div>
       </div>
-      <div className="modal-backdrop bg-black/60" onClick={onCerrar} />
+      <div className="modal-backdrop bg-[#212121]/40" onClick={onCerrar} />
     </dialog>
   );
 }
@@ -92,7 +92,7 @@ export function CapaUi() {
 /** Rectángulo proporcional a un formato (vista previa). */
 export const Forma = ({ w, h, max = 56 }: { w: number; h: number; max?: number }) => {
   const k = max / Math.max(w, h);
-  return <span className="block rounded-[3px] border border-primary/60 bg-primary/10" style={{ width: w * k, height: h * k }} />;
+  return <span className="block rounded-[4px] border border-verde/70 bg-mint-suave" style={{ width: w * k, height: h * k }} />;
 };
 
 /** Elegir formato: los de serie o un tamaño a medida. Para «Cambiar tamaño», además «Escalar los elementos». */

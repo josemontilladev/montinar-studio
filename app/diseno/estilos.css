@@ -4,34 +4,67 @@
 @plugin 'daisyui' {
   themes: false;
 }
+/* Los colores de metricaseo.site (app.css .lp): lienzo gris suave, superficies blancas, tinta y menta. */
 @plugin 'daisyui/theme' {
   name: 'estudio';
   default: true;
-  prefersdark: true;
-  color-scheme: dark;
-  --color-base-100: #1b1b1e;
-  --color-base-200: #141416;
-  --color-base-300: #2b2b30;
-  --color-base-content: #ececf1;
-  --color-primary: #22d3e6;
-  --color-primary-content: #071417;
-  --color-secondary: #8b7bff;
-  --color-secondary-content: #0e0e10;
+  color-scheme: light;
+  --color-base-100: #ffffff;
+  --color-base-200: #f3f3f3;
+  --color-base-300: #e2e2e2;
+  --color-base-content: #212121;
+  --color-primary: #212121;
+  --color-primary-content: #ffffff;
+  --color-secondary: #12a150;
+  --color-secondary-content: #ffffff;
   --color-accent: #74f5a1;
   --color-accent-content: #212121;
-  --color-neutral: #2a2a2f;
-  --color-neutral-content: #ececf1;
-  --color-info: #5aa6ff;
-  --color-info-content: #0e0e10;
-  --color-success: #3ddc84;
-  --color-success-content: #0e0e10;
+  --color-neutral: #212121;
+  --color-neutral-content: #f3f3f3;
+  --color-info: #2563eb;
+  --color-info-content: #ffffff;
+  --color-success: #12a150;
+  --color-success-content: #ffffff;
+  --color-warning: #c27c0e;
+  --color-warning-content: #ffffff;
+  --color-error: #d92d20;
+  --color-error-content: #ffffff;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 0;
+  --noise: 0;
+}
+@plugin 'daisyui/theme' {
+  name: 'estudio-oscuro';
+  prefersdark: true;
+  color-scheme: dark;
+  --color-base-100: #1c1c1c;
+  --color-base-200: #121212;
+  --color-base-300: #2c2c2c;
+  --color-base-content: #f3f3f3;
+  --color-primary: #f3f3f3;
+  --color-primary-content: #121212;
+  --color-secondary: #74f5a1;
+  --color-secondary-content: #121212;
+  --color-accent: #74f5a1;
+  --color-accent-content: #121212;
+  --color-neutral: #f3f3f3;
+  --color-neutral-content: #121212;
+  --color-info: #7aa7ff;
+  --color-info-content: #121212;
+  --color-success: #74f5a1;
+  --color-success-content: #121212;
   --color-warning: #ffb547;
-  --color-warning-content: #0e0e10;
-  --color-error: #ff5f5f;
-  --color-error-content: #0e0e10;
-  --radius-selector: 0.375rem;
-  --radius-field: 0.375rem;
-  --radius-box: 0.5rem;
+  --color-warning-content: #121212;
+  --color-error: #ff6b5f;
+  --color-error-content: #121212;
+  --radius-selector: 0.5rem;
+  --radius-field: 0.75rem;
+  --radius-box: 1rem;
   --size-selector: 0.25rem;
   --size-field: 0.25rem;
   --border: 1px;
@@ -39,14 +72,48 @@
   --noise: 0;
 }
 
-@theme {
-  --font-sans: 'Inter Variable', Inter, 'Segoe UI', system-ui, sans-serif;
-  --color-fondo: #0e0e10;
-  --color-panel2: #222226;
-  --color-panel3: #2a2a2f;
-  --color-borde2: #3a3a41;
-  --color-suave: #a1a1ab;
-  --color-tenue: #6f6f7a;
+/* Colores propios del estudio, por tema: barras (fondo), tarjetas (panel2), campos (panel3), mesa de trabajo (lienzo). */
+:root,
+[data-theme='estudio'] {
+  --fondo: #ffffff;
+  --panel2: #f7f7f7;
+  --panel3: #f3f3f3;
+  --borde2: #cfcfcf;
+  --suave: #5c5c5c;
+  --tenue: #8a8a8a;
+  --lienzo: #ececec;
+  --lienzo-punto: rgba(33, 33, 33, 0.09);
+  --miniatura: #f3f3f3;
+  --mint-suave: #d5fce3;
+  --barra-scroll: #cfcfcf;
+}
+[data-theme='estudio-oscuro'] {
+  --fondo: #171717;
+  --panel2: #222222;
+  --panel3: #262626;
+  --borde2: #3d3d3d;
+  --suave: #a6a6a6;
+  --tenue: #7a7a7a;
+  --lienzo: #0e0e0e;
+  --lienzo-punto: rgba(243, 243, 243, 0.06);
+  --miniatura: #121212;
+  --mint-suave: #1d3a29;
+  --barra-scroll: #3d3d3d;
+}
+
+@theme inline {
+  --font-sans: 'Inter', 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Inter Tight', 'Inter', system-ui, sans-serif;
+  --color-fondo: var(--fondo);
+  --color-panel2: var(--panel2);
+  --color-panel3: var(--panel3);
+  --color-borde2: var(--borde2);
+  --color-suave: var(--suave);
+  --color-tenue: var(--tenue);
+  --color-miniatura: var(--miniatura);
+  --color-mint: #74f5a1;
+  --color-mint-suave: var(--mint-suave);
+  --color-verde: #12a150;
 }
 
 /* Fuentes de la marca para el contenido del lienzo (las mismas se incrustan al exportar) */
@@ -85,7 +152,8 @@ body,
   height: 100%;
 }
 body {
-  background: var(--color-fondo);
+  background: var(--color-base-200);
+  color: var(--color-base-content);
   font-size: 12.5px;
   overflow: hidden;
   user-select: none;
@@ -95,12 +163,61 @@ input,
 textarea {
   user-select: text;
 }
+/* Titulares con la tipografía de la web (Inter Tight, apretada). */
+h1,
+h2,
+h3,
+.titular {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+/* Botones en píldora, como en toda la web. */
+.btn {
+  border-radius: 999px;
+}
+.btn-square {
+  border-radius: 0.6rem;
+}
+/* La llamada principal de la web: bloque tinta con un círculo menta que lleva la flecha. */
+.btn-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 1.875rem;
+  padding: 0 0.25rem 0 0.875rem;
+  border-radius: 999px;
+  background: var(--color-base-content);
+  color: var(--color-base-200);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.btn-marca:hover {
+  opacity: 0.92;
+}
+.btn-marca:disabled {
+  opacity: 0.5;
+}
+.btn-marca-ico {
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 999px;
+  background: #74f5a1;
+  color: #212121;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-marca:hover .btn-marca-ico {
+  transform: rotate(45deg);
+}
 ::-webkit-scrollbar {
   width: 9px;
   height: 9px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3a3a41;
+  background: var(--barra-scroll);
   border-radius: 9px;
   border: 2px solid transparent;
   background-clip: padding-box;
@@ -108,8 +225,11 @@ textarea {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+/* Mesa de trabajo: el gris de la web con la retícula de puntos de sus pantallas. */
 .lienzo-fondo {
-  background-color: #0e0e10;
+  background-color: var(--lienzo);
+  background-image: radial-gradient(var(--lienzo-punto) 1px, transparent 1px);
+  background-size: 18px 18px;
 }
 /* Barra superior: en la app de escritorio es la barra de título (se arrastra la ventana y deja sitio a sus botones) */
 .barra-app {
