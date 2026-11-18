@@ -4,5 +4,9 @@
   "appId": "site.metricaseo.studio",
   "puerto": 4410,
   "proyectoPorDefecto": "C:/Users/KronnicxZ/dev/Metrica SEO/metricaseo-promo/editables/promo-agencias-16x9",
-  "web": "https://metricaseo.site"
+  "web": "https://metricaseo.site",
+  "actualizaciones": {
+    "proveedor": "carpeta",
+    "ruta": "C:/Users/KronnicxZ/Instaladores/MetricaSEO Studio/actualizaciones"
+  }
 }

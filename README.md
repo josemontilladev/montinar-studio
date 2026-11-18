@@ -41,18 +41,14 @@ en el LEEME).
 
 ## Publicar una versión
 
-Las actualizaciones automáticas leen las releases de este repositorio (público, sin token).
-
 ```bash
-# 1) sube la versión en package.json y haz commit
-npm version 1.3.0 --no-git-tag-version
-git commit -am "Versión 1.3.0"
-# 2) etiqueta y sube: la acción «Release Windows» compila y crea la release
-git tag v1.3.0
-git push origin main --tags
+npm run release                          # sube el parche, compila el instalador y lo deja en el origen de actualizaciones
+npm run release -- minor --notas "Qué cambia"
 ```
 
-Alternativa sin Actions, desde este equipo: `set GH_TOKEN=<token>` y `npm run release`.
+Las apps instaladas leen ese origen y se actualizan solas. El origen por defecto es una carpeta de este equipo
+(`electron/estudio.config.json → actualizaciones`); no se sube nada a internet. Detalle y otros orígenes en el LEEME,
+«Actualizaciones automáticas».
 
 ## Estructura
 

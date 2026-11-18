@@ -290,29 +290,53 @@ Python local (sin servicios de pago): `faster-whisper`, `numpy`, `scipy`, `av`.
 
 ## Actualizaciones automáticas
 
-La app trae electron-updater y busca versiones nuevas en las **releases de GitHub** de
-`josemontilladev/montinar-studio` (canal en `electron/estudio.config.json` → `actualizaciones`). Al abrirse (y en
-Menú → «Buscar actualizaciones») descarga en segundo plano y muestra «Versión X lista · Reiniciar e instalar» (si no,
-se instala al cerrar).
+La app instalada se actualiza sola: al abrirse (a los 15 s), cada 3 horas mientras está abierta y en
+Menú → «Buscar actualizaciones» mira si hay una versión nueva en el **origen de actualizaciones**. Si la hay, la
+descarga en segundo plano y avisa abajo a la derecha: «Hay una versión nueva (X) · **Actualizar y reiniciar**», con
+«Novedades» si la versión trae notas. «Actualizar y reiniciar» guarda antes el proyecto (con copia en Versiones) y no
+reinicia si hay una exportación u otro trabajo en marcha; si no se pulsa, se instala al cerrar la app.
 
-**Repositorio público o privado.** Con el repositorio **público** (como está) las actualizaciones funcionan sin
-ninguna clave: es lo más sencillo y robusto. Un repositorio **privado** obliga a meter un token de GitHub dentro de la
-app (cualquiera que la tenga podría leerlo), así que no se recomienda; si el código tiene que ser privado, lo mejor es
-un segundo repositorio **público solo para releases** (p. ej. `montinar-studio-releases`, sin código) y poner su
-nombre en `actualizaciones.repo` y en `build.publish` de `package.json`.
+**Qué hay que hacer tras cambiar el código.** Los cambios se hacen en el código, así que hace falta publicarlos una
+vez; a partir de ahí cada app instalada se actualiza sola. Es un solo comando:
 
-Cambiar el canal sin recompilar: `%APPDATA%\Montinar Studio\actualizaciones.json` manda sobre la configuración:
-```json
-{ "proveedor": "github", "owner": "josemontilladev", "repo": "montinar-studio" }
+```bash
+npm run release                          # 2.2.0 → 2.2.1: comprueba tipos, compila el instalador y lo publica
+npm run release -- minor                 # 2.2.0 → 2.3.0   (también major, o una versión exacta: 2.4.0)
+npm run release -- --notas "Qué cambia"  # texto que la app enseña en «Novedades»
 ```
-o un servidor propio: `{ "proveedor": "generic", "url": "https://tu-servidor.com/montinar-studio/" }`.
 
-**Publicar una versión** (nada se publica solo):
-1. Sube `"version"` en `package.json` (p. ej. 1.2.0 → 1.3.0) y haz commit.
-2. `git tag v1.3.0 && git push origin main --tags` → la acción «Release Windows» de GitHub compila el instalador y
-   crea la release con `Montinar Studio Setup 1.3.0.exe`, su `.blockmap` y `latest.yml` (usa solo el `GITHUB_TOKEN`
-   de la acción).
-3. Desde este equipo, en vez de la acción: `set GH_TOKEN=<token con permiso de contents>` y `npm run release`.
+Tarda unos minutos (el instalador pesa unos 300 MB). Después, `git commit -am "Versión X"`.
+
+**El origen.** Está en `electron/estudio.config.json → actualizaciones`. Por defecto es una carpeta de este equipo:
+
+```json
+{ "proveedor": "carpeta", "ruta": "C:/Users/KronnicxZ/Instaladores/MetricaSEO Studio/actualizaciones" }
+```
+
+`npm run release` deja ahí el instalador, su `.blockmap` y `latest.yml` (solo la última versión). No sale nada a
+internet: la app sirve esa carpeta a su actualizador por una dirección que solo existe dentro del equipo (127.0.0.1).
+Otros orígenes posibles:
+
+- **Carpeta sincronizada o de red**, para varios equipos: la misma configuración con una ruta que vean todos (una
+  carpeta de Syncthing o `//servidor/carpeta`). Dentro de `dev` no puede llamarse `build`, `dist`, `out`, `bin` ni
+  `target` (Syncthing las ignora), y cada versión son unos 300 MB que se sincronizan.
+- **Servidor propio** (por ejemplo un bucket con dominio): `{ "proveedor": "generic", "url": "https://…/studio/" }`.
+  `npm run release` compila y dice qué tres archivos hay que subir; no sube nada.
+- **GitHub**: `{ "proveedor": "github", "owner": "…", "repo": "…" }`, solo con un repositorio **público**. Uno privado
+  obligaría a meter un token dentro de la app, que cualquiera con el programa podría leer.
+
+Para cambiar el origen de una app ya instalada sin recompilar: `%APPDATA%\MetricaSEO Studio\actualizaciones.json`,
+con el mismo formato, manda sobre la configuración.
+
+**Límites reales.**
+- La versión 2.1.1 no sabe actualizarse (se compiló sin los datos del actualizador): hay que instalar a mano una vez
+  la primera versión que los trae (2.2.0 o posterior). A partir de ella ya es automático.
+- La app no está firmada. Las actualizaciones automáticas funcionan igual (el instalador se comprueba por su huella
+  SHA-512 de `latest.yml`), pero Windows SmartScreen puede avisar al instalar a mano y, sin firma, nada garantiza a un
+  tercero quién publicó la actualización: quien pueda escribir en el origen puede publicar una versión. Con una
+  carpeta propia eso es aceptable; con un origen en internet conviene firmar (ver abajo).
+- El origen por defecto solo sirve a este equipo. En otro equipo la app dirá «Todavía no hay ninguna versión
+  publicada» hasta que se le dé un origen que vea.
 
 ## Firma de código (para quitar el aviso de SmartScreen)
 
