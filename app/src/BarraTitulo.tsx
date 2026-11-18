@@ -94,9 +94,14 @@ export const BarraTitulo: React.FC = () => {
       useEd.getState().avisar(e.message, 'error');
     }
   };
+  const irDiseno = (q = '') => void import('./InicioDisenos').then((m) => m.irADiseno(q));
   const items: Item[] = [
     { et: 'Inicio (proyectos y plantillas)', ico: 'plantillas', fn: () => dlg('inicio') },
     { et: 'Grabar pantalla y cámara…', ico: 'monitor', fn: () => dlg('grabar') },
+    'sep',
+    // estudio de diseño (posts, carruseles, portadas): antes solo se llegaba desde Inicio o con el atajo
+    { et: 'Nuevo diseño (post, carrusel, portada)…', ico: 'imagen', kbd: 'Ctrl+Shift+N', fn: () => irDiseno('?nuevo=1') },
+    { et: 'Mis diseños', ico: 'plantillas', kbd: 'Ctrl+Shift+D', fn: () => irDiseno() },
     'sep',
     ...(studio
       ? ([
@@ -128,6 +133,9 @@ export const BarraTitulo: React.FC = () => {
       </div>
       <button className="btn chico" style={{ marginLeft: 6 }} onClick={(e) => setMenu({ x: (e.currentTarget as HTMLElement).getBoundingClientRect().left, y: 36 })} data-prueba="menu-btn">
         Menú <Ico n="abajo" s={13} />
+      </button>
+      <button className="btn chico" onClick={() => irDiseno()} title="Estudio de diseño: posts, carruseles y portadas (Ctrl+Shift+D)" data-prueba="ir-diseno">
+        <Ico n="imagen" s={14} /> Diseño
       </button>
       <ProgresoExportar />
       <div className={`auto ${guardado}`} title={errorGuardado ?? 'Guardado automático en proyecto.json'} data-prueba="guardado">
