@@ -21,6 +21,7 @@ import { registrarInicio } from './inicio';
 import { registrarCompartida } from './compartida';
 import { registrarDisenos } from './disenos';
 import { listarMedios, nombreSeguro, ondas, PICOS_SEG, rutaPublica } from './medios';
+import { cancelarPreparacion, estadoEquipo, prepararEquipo, rutaModeloWhisper, type GrupoId } from './equipo';
 import { trabajoNode, actualizar, archivarToma, cancelar, listar, mostrarEnCarpeta, nuevo, publico as publicoT, pythonJSON, regenerarVoz, renderizar, suscribir, trabajoPython } from './trabajos';
 
 const app = express();
@@ -30,6 +31,25 @@ app.use('/api', express.json({ limit: '30mb' }));
 const err = (res: express.Response, e: any, code = 400) => res.status(code).json({ error: String(e?.message ?? e) });
 
 // ——— Proyecto ———
+
+// «Preparar este equipo»: Python propio, paquetes y modelo de subtítulos (servidor/equipo.ts)
+app.get('/api/equipo', async (_req, res) => {
+  try {
+    res.json(await estadoEquipo());
+  } catch (e) {
+    err(res, e, 500);
+  }
+});
+app.post('/api/equipo/preparar', (req, res) => {
+  const grupos = (Array.isArray(req.body?.grupos) ? req.body.grupos : ['base']).filter((g: unknown): g is GrupoId => g === 'base' || g === 'ia');
+  const r = req.body?.reinstalar;
+  const reinstalar = r === 'python' || r === 'base' || r === 'modelo' || r === 'ia' ? r : undefined;
+  res.json({ trabajo: prepararEquipo(grupos.length ? grupos : ['base'], reinstalar) });
+});
+app.post('/api/equipo/cancelar', (_req, res) => {
+  cancelarPreparacion();
+  res.json({ ok: true });
+});
 
 app.get('/api/dependencias', async (_req, res) => {
   try {
@@ -419,7 +439,8 @@ app.post('/api/trabajos/subtitulos', (req, res) => {
   try {
     const { items, modelo } = req.body ?? {};
     if (!Array.isArray(items) || !items.length) return err(res, 'Nada que transcribir');
-    const conf = { ffmpeg: FFMPEG, modelo: modelo ?? 'small', idioma: 'es', items: items.map((x: any) => ({ id: String(x.id), archivo: rutaPublica(String(x.src)), texto: x.texto ?? '' })) };
+    // el modelo descargado por «Preparar este equipo» si está; si no, el nombre (caché de Hugging Face)
+    const conf = { ffmpeg: FFMPEG, modelo: rutaModeloWhisper(String(modelo ?? 'small')), idioma: 'es', items: items.map((x: any) => ({ id: String(x.id), archivo: rutaPublica(String(x.src)), texto: x.texto ?? '' })) };
     res.json({ trabajo: trabajoPython('subtitulos', `Subtítulos · ${items.length} audio${items.length > 1 ? 's' : ''}`, 'transcribir.py', conf) });
   } catch (e) {
     err(res, e);

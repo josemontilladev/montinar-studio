@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { fondoCierra } from './campos';
 import { useEd } from './estado';
 import { Ico } from './iconos';
+import { PanelEquipo } from './Equipo';
 
 type Dep = { id: string; nombre: string; grupo: string; estado: 'ok' | 'aviso' | 'falta'; detalle: string; arreglo?: string; usadoPara: string };
 
@@ -32,6 +33,7 @@ export const DDependencias: React.FC = () => {
           </button>
         </div>
         <div className="cuerpo">
+          <PanelEquipo />
           {ds == null && <div className="vacio">Comprobando…</div>}
           {grupos.map((g) => (
             <div key={g} style={{ marginBottom: 14 }}>

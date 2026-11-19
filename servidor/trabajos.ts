@@ -4,10 +4,11 @@ import path from 'node:path';
 import os from 'node:os';
 import { spawn, execFile, type ChildProcess } from 'node:child_process';
 import type { Response } from 'express';
-import { DESC, EDITOR, FFMPEG, PROY, rutas } from './config';
+import { DESC, EDITOR, FFMPEG, FFPROBE, PROY, rutas } from './config';
 import { nombreSeguro, rutaPublica } from './medios';
 import { normalizarSonoridad } from './normalizar';
 import { acelElegida } from './gpu';
+import { pythonActual } from './equipo';
 
 export type Trabajo = {
   id: string;
@@ -140,8 +141,11 @@ export const regenerarVoz = (req: PeticionVoz) => {
         for (const [f, b] of guardados) fs.writeFileSync(f, b);
       };
       actualizar(t, { etapa: 'Generando voz…', progreso: 0.05 });
-      const [cmd, ...args] = v.comando.map((x) => x.replace('{id}', req.id));
-      const p = spawn(cmd, args, { cwd: PROY, env: { ...process.env, PYTHONIOENCODING: 'utf8', PYTHONUNBUFFERED: '1' }, windowsHide: true });
+      const [orden, ...args] = v.comando.map((x) => x.replace('{id}', req.id));
+      // «python» del proyecto = el Python de la app (el propio de este equipo si está preparado); FFPROBE/FFMPEG: los
+      // que trae la app, porque en otro equipo el kit no tiene node_modules
+      const cmd = /^(python3?|py)(\.exe)?$/i.test(orden) ? pythonActual() : orden;
+      const p = spawn(cmd, args, { cwd: PROY, env: { ...process.env, PYTHONIOENCODING: 'utf8', PYTHONUNBUFFERED: '1', FFPROBE, FFMPEG }, windowsHide: true });
       (t as any).proc = p;
       const leer = (b: Buffer) => {
         for (const l of b.toString('utf8').split(/\r?\n/)) {
@@ -359,7 +363,7 @@ export const pythonJSON = (script: string, conf: unknown): Promise<any> =>
     const cf = path.join(rutas.cache, `py-${id}.json`);
     const out = path.join(rutas.cache, `py-${id}-res.json`);
     fs.writeFileSync(cf, JSON.stringify(conf));
-    execFile(PYTHON, [path.join(EDITOR, 'servidor', script), cf, out], { env: { ...process.env, PYTHONIOENCODING: 'utf8' }, windowsHide: true, maxBuffer: 1 << 24 }, (err, _o, se) => {
+    execFile(pythonActual(), [path.join(EDITOR, 'servidor', script), cf, out], { env: { ...process.env, PYTHONIOENCODING: 'utf8' }, windowsHide: true, maxBuffer: 1 << 24 }, (err, _o, se) => {
       fs.rmSync(cf, { force: true });
       if (err || !fs.existsSync(out)) return rej(new Error(String(se || err?.message || 'sin resultado').slice(-400)));
       const r = JSON.parse(fs.readFileSync(out, 'utf8'));
@@ -379,7 +383,7 @@ export const mostrarEnCarpeta = (abs: string) => {
 
 // ——— Scripts de Python del editor (transcribir, audio, análisis) ———
 
-export const PYTHON = process.env.PYTHON ?? (process.platform === 'win32' ? 'py' : 'python3');
+// El Python de los scripts: pythonActual() (equipo.ts), el propio de la app si este equipo está preparado.
 
 /**
  * Ejecuta servidor/<script> con una configuración JSON y devuelve el JSON que escribe. Las líneas «PROGRESO a/b»
@@ -391,7 +395,7 @@ export const trabajoPython = (tipo: Trabajo['tipo'], titulo: string, script: str
   const cf = path.join(rutas.cache, `${t.id}-conf.json`);
   const out = path.join(rutas.cache, `${t.id}-res.json`);
   fs.writeFileSync(cf, JSON.stringify(conf));
-  const p = spawn(PYTHON, [path.join(EDITOR, 'servidor', script), cf, out], { cwd: PROY, env: { ...process.env, PYTHONIOENCODING: 'utf8', PYTHONUNBUFFERED: '1' }, windowsHide: true });
+  const p = spawn(pythonActual(), [path.join(EDITOR, 'servidor', script), cf, out], { cwd: PROY, env: { ...process.env, PYTHONIOENCODING: 'utf8', PYTHONUNBUFFERED: '1' }, windowsHide: true });
   (t as any).proc = p;
   actualizar(t, { etapa: 'Preparando…', progreso: 0.03 });
   const leer = (b: Buffer) => {
@@ -465,7 +469,7 @@ export const analizarFluidez = (archivo: string): Promise<any> =>
     const cf = path.join(rutas.cache, `fluidez-${id}.json`);
     const out = path.join(rutas.cache, `fluidez-${id}-res.json`);
     fs.writeFileSync(cf, JSON.stringify({ archivo }));
-    execFile(PYTHON, [path.join(EDITOR, 'servidor', 'fluidez.py'), cf, out], { env: { ...process.env, PYTHONIOENCODING: 'utf8' }, windowsHide: true, maxBuffer: 1 << 24 }, (err) => {
+    execFile(pythonActual(), [path.join(EDITOR, 'servidor', 'fluidez.py'), cf, out], { env: { ...process.env, PYTHONIOENCODING: 'utf8' }, windowsHide: true, maxBuffer: 1 << 24 }, (err) => {
       fs.rmSync(cf, { force: true });
       if (err || !fs.existsSync(out)) return rej(err ?? new Error('sin resultado'));
       const r = JSON.parse(fs.readFileSync(out, 'utf8'));

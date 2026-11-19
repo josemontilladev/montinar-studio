@@ -16,6 +16,7 @@ import { aplicarAudio } from './audioPro';
 import { MenuContextual, Peticion } from './menus';
 import { seguirTrabajos } from './escritorio';
 import { AvisoActualizacion } from './Actualizacion';
+import { AvisoEquipo } from './Equipo';
 import { aplicarSeguimiento, pedirZona } from './Seguimiento';
 import { cargarFuentesProyecto, copiarEstilo, estiloEnTodos, pegarEstilo, useCatalogo } from './libreria';
 
@@ -310,6 +311,7 @@ export const App: React.FC = () => {
       <Dialogos />
       <MenuContextual />
       <AvisoActualizacion />
+      <AvisoEquipo />
       <Peticion />
       <Bandeja />
       <Avisos />

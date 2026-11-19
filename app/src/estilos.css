@@ -641,3 +641,10 @@ input[type='color'] { width: 28px; height: 24px; padding: 0; border: 1px solid v
 /* Foco de teclado con el anillo menta de la web (en vez del contorno negro del navegador) */
 button:focus-visible, .btn:focus-visible, .btn-marca:focus-visible, .tab-r:focus-visible { outline: 2px solid var(--menta); outline-offset: 2px; }
 button:focus:not(:focus-visible) { outline: none; }
+/* «Preparar este equipo»: a la izquierda, para no tapar el aviso de actualización */
+.aviso-equipo { right: auto; left: 16px; max-width: min(460px, calc(100vw - 32px)); }
+.equipo-prog { display: flex; flex-direction: column; gap: 6px; }
+.equipo-prog progress { width: 100%; height: 6px; accent-color: var(--acento); }
+.tenue-equipo { font-size: 12px; color: var(--suave); }
+.equipo-res { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; }
+.equipo-res.error { color: var(--rojo); }

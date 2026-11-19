@@ -38,9 +38,9 @@ Requisitos: Node 22+, Edge/Chrome. Para regenerar voces, lo que pida el script d
   Proyectos recientes, Guardar y crear versión, Versiones, Exportar, Fotograma PNG, Abrir carpeta de salida,
   Revisión, Dependencias, Atajos y Salir. Solo se puede abrir una vez; al cerrar se paran también los renders y
   trabajos de voz en curso.
-- Trae Node (Electron), Remotion, ffmpeg y **Chrome Headless Shell** (exporta sin conexión). Lo externo es
-  **Python** con `piper-tts`, `faster-whisper`, `numpy`, `scipy` y `av` (voz, subtítulos automáticos, audio y
-  fluidez). **Menú → Dependencias** dice qué está instalado y cómo instalar lo que falte.
+- Trae Node (Electron), Remotion, ffmpeg y **Chrome Headless Shell** (exporta sin conexión). Lo que no trae (Python,
+  sus paquetes y el modelo de subtítulos) lo instala ella misma: ver «Preparar este equipo». **Menú → Dependencias**
+  dice qué está instalado en este equipo.
 - Datos de la app (caché, kits de marca, recientes): `%APPDATA%\Montinar Studio`.
 - **Venías de «Montilla Studio»**: el primer arranque COPIA los datos de `%APPDATA%\Montilla Studio` (recientes,
   biblioteca, kits de marca, ajustes, favoritos, modelos, diarios) y los proyectos de `Documentos\Montilla Studio` a
@@ -353,8 +353,28 @@ con el mismo formato, manda sobre la configuración.
   carpeta del proyecto…».
 - **No hace falta `npm install` en el kit**: Syncthing no sincroniza `node_modules`, así que la vista previa y la
   exportación usan los paquetes que trae la app (Remotion, React, lucide-react…) cuando el kit no tiene los suyos.
-- **Voz y subtítulos automáticos** necesitan Python y sus paquetes en ese equipo (ver Dependencias). Los diseños del
-  estudio se guardan en `Documentos\MetricaSEO Studio\Diseños` de cada equipo y no se sincronizan.
+- **Voz y subtítulos automáticos**: la primera vez la app avisa «Este equipo necesita preparar la voz y los
+  subtítulos» y lo instala todo con un botón (ver «Preparar este equipo»). Los diseños del estudio se guardan en
+  `Documentos\MetricaSEO Studio\Diseños` de cada equipo y no se sincronizan.
+
+## Preparar este equipo (Python, paquetes y modelo, sin instalar nada a mano)
+
+- Al abrir, si a este equipo le falta lo que usan la voz y los subtítulos, sale un aviso abajo a la izquierda con
+  **«Preparar este equipo»** (≈ 620 MB de descarga, unos 900 MB instalados). Nada se descarga sin pulsarlo; la app
+  se puede seguir usando mientras tanto. **Menú → Dependencias → «Este equipo»** muestra cada componente, prepara,
+  instala los **efectos de IA** (quitar fondo y seguimiento, ≈ 144 MB más) o reinstala uno.
+- Se instala en `%LOCALAPPDATA%\MetricaSEO Studio\runtime` (de este equipo; nunca en la carpeta sincronizada) y sin
+  permisos de administrador: el **Python embebible oficial** de python.org, `pip` y los paquetes de PyPI con las
+  versiones fijadas que funcionan, y el modelo de subtítulos **whisper «small»** de Hugging Face (Systran).
+- Cada archivo se comprueba con la huella fijada en `servidor/equipo-manifiesto.json` (SHA-256 de python.org, de
+  PyPI y de Hugging Face). Si se corta la conexión, pulsar otra vez sigue donde se quedó. Al terminar, la app genera
+  una frase de voz de prueba, la transcribe y dice si todo funciona.
+- La app usa siempre ese Python propio si existe; si no, el del sistema (`py` o `PYTHON`).
+- Para cambiar de versiones: `py herramientas/manifiesto-equipo.py` (regenera el manifiesto con lo que funciona en
+  este equipo) y publicar.
+- Límites: la **voz** usa el servicio de Microsoft (edge-tts) y necesita internet al generarla; si un equipo no tiene
+  el componente de **Microsoft Visual C++**, los subtítulos lo dirán con el enlace oficial (instalarlo pide permiso de
+  administrador); el modelo de **quitar fondo** (≈ 176 MB) lo descarga rembg la primera vez que se usa.
 
 ## Firma de código (para quitar el aviso de SmartScreen)
 

@@ -1,15 +1,9 @@
 /** Estado de las dependencias (lo que trae la app y lo externo), con instrucciones para arreglar lo que falte. */
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
-import { execFile } from 'node:child_process';
 import { DESC, EDITOR, FFMPEG, FFPROBE, PROY, contratoIgual, rutas } from './config';
-import { PYTHON } from './trabajos';
 
-export type Dep = { id: string; nombre: string; grupo: 'Incluido en la app' | 'Proyecto' | 'Externo (Python)'; estado: 'ok' | 'aviso' | 'falta'; detalle: string; arreglo?: string; usadoPara: string };
-
-const ejecutar = (cmd: string, args: string[]): Promise<{ ok: boolean; out: string }> =>
-  new Promise((res) => execFile(cmd, args, { windowsHide: true, timeout: 20000 }, (err, o, e) => res({ ok: !err, out: `${o}${e}`.trim() })));
+export type Dep = { id: string; nombre: string; grupo: 'Incluido en la app' | 'Proyecto'; estado: 'ok' | 'aviso' | 'falta'; detalle: string; arreglo?: string; usadoPara: string };
 
 export const revisarDependencias = async (): Promise<Dep[]> => {
   const d: Dep[] = [];
@@ -46,46 +40,20 @@ export const revisarDependencias = async (): Promise<Dep[]> => {
   }
   d.push({ id: 'proyecto', nombre: 'proyecto.json', grupo: 'Proyecto', estado: valido ? 'ok' : 'falta', detalle: rutas.proyecto, arreglo: valido ? undefined : 'Recupera una versión en Versiones o revisa el archivo', usadoPara: 'todo' });
   d.push({ id: 'contrato', nombre: 'Contrato (src/contrato)', grupo: 'Proyecto', estado: contratoIgual() ? 'ok' : 'aviso', detalle: contratoIgual() ? 'igual que el del editor' : 'distinto al del editor', arreglo: contratoIgual() ? undefined : 'Copia editor-video/contrato a src/contrato del proyecto', usadoPara: 'que la vista previa y el render coincidan' });
-  const voces = DESC.voz?.voces ? path.join(PROY, DESC.voz.voces) : null;
-  const nVoces = voces && fs.existsSync(voces) ? fs.readdirSync(voces).filter((f) => f.endsWith('.onnx')).length : 0;
-  d.push({
-    id: 'voces',
-    nombre: 'Voces de Piper (.onnx)',
-    grupo: 'Proyecto',
-    estado: !DESC.voz ? 'aviso' : nVoces ? 'ok' : 'falta',
-    detalle: !DESC.voz ? 'el proyecto no declara script de voz' : nVoces ? `${nVoces} voz/voces en ${DESC.voz.voces}` : 'no hay voces',
-    arreglo: nVoces ? undefined : 'Descarga es_MX-claude-high.onnx (+ .onnx.json) de huggingface.co/rhasspy/piper-voices a tools/voces',
-    usadoPara: 'regenerar voz',
-  });
-  // Python
-  const py = await ejecutar(PYTHON, ['--version']);
-  d.push({
-    id: 'python',
-    nombre: 'Python 3',
-    grupo: 'Externo (Python)',
-    estado: py.ok ? 'ok' : 'falta',
-    detalle: py.ok ? py.out : `no se encuentra «${PYTHON}»`,
-    arreglo: py.ok ? undefined : 'Instala Python 3.11+ desde python.org (marca «Add to PATH»)',
-    usadoPara: 'voz, subtítulos automáticos, audio, fluidez',
-  });
-  if (py.ok) {
-    const mods: [string, string, string][] = [
-      ['faster_whisper', 'faster-whisper', 'subtítulos automáticos y tiempos de palabra'],
-      ['piper', 'piper-tts', 'regenerar voz'],
-      ['numpy', 'numpy', 'audio y fluidez'],
-      ['scipy', 'scipy', 'mejorar voz, ritmo, sonoridad'],
-      ['av', 'av', 'control de fluidez'],
-    ];
-    const r = await ejecutar(PYTHON, ['-c', `import importlib.util as u, json; print(json.dumps([m for m in ${JSON.stringify(mods.map((m) => m[0]))} if u.find_spec(m) is None]))`]);
-    let faltan: string[] = [];
-    try {
-      faltan = JSON.parse(r.out.split('\n').pop() ?? '[]');
-    } catch {}
-    for (const [m, pip, uso] of mods)
-      d.push({ id: `py-${m}`, nombre: pip, grupo: 'Externo (Python)', estado: faltan.includes(m) ? 'falta' : 'ok', detalle: faltan.includes(m) ? 'no instalado' : 'instalado', arreglo: faltan.includes(m) ? `${PYTHON} -m pip install ${pip}` : undefined, usadoPara: uso });
-    const hf = path.join(os.homedir(), '.cache', 'huggingface', 'hub');
-    const modelo = fs.existsSync(hf) && fs.readdirSync(hf).some((f) => f.includes('faster-whisper-small'));
-    d.push({ id: 'whisper-small', nombre: 'Modelo whisper «small»', grupo: 'Externo (Python)', estado: modelo ? 'ok' : 'aviso', detalle: modelo ? 'descargado' : 'se descargará la primera vez (unos 480 MB, necesita internet)', usadoPara: 'subtítulos automáticos' });
+  // Voces de Piper: solo si el proyecto las declara (el kit de MétricaSEO usa edge-tts y no las necesita)
+  if (DESC.voz?.voces) {
+    const voces = path.join(PROY, DESC.voz.voces);
+    const nVoces = fs.existsSync(voces) ? fs.readdirSync(voces).filter((f) => f.endsWith('.onnx')).length : 0;
+    d.push({
+      id: 'voces',
+      nombre: 'Voces de Piper (.onnx)',
+      grupo: 'Proyecto',
+      estado: nVoces ? 'ok' : 'falta',
+      detalle: nVoces ? `${nVoces} voz/voces en ${DESC.voz.voces}` : 'no hay voces',
+      arreglo: nVoces ? undefined : 'Descarga es_MX-claude-high.onnx (+ .onnx.json) de huggingface.co/rhasspy/piper-voices a tools/voces',
+      usadoPara: 'regenerar voz',
+    });
   }
+  // Python, sus paquetes y el modelo de subtítulos: sección «Este equipo» (/api/equipo), con instalación automática
   return d;
 };
