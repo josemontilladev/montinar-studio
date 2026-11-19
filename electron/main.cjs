@@ -26,8 +26,13 @@ app.setName(NOMBRE_APP);
 app.setAppUserModelId(CONF.appId || 'dev.montinar.studio');
 
 const DATOS = app.getPath('userData');
-// Documentos\<app>: Videos (proyectos nuevos) y Diseños (estudio de diseño).
-const DOCS = path.join(process.env.STUDIO_DOCS ?? app.getPath('documents'), NOMBRE_APP);
+// Biblioteca sincronizada (~/dev/Metrica SEO/studio-biblioteca, ver sincronizada.cjs): biblioteca compartida, kits de
+// marca, estilos propios, Diseños y Videos. Sin la carpeta `dev`, Documentos\<app> y los datos de la app.
+const { carpetaSincronizada, llevarASincronizada } = require('./sincronizada.cjs');
+const SINCRONIZADA = carpetaSincronizada(app.getPath('home'));
+const DOCS_LOCAL = path.join(process.env.STUDIO_DOCS ?? app.getPath('documents'), NOMBRE_APP);
+const DOCS = process.env.STUDIO_DOCS ? DOCS_LOCAL : (SINCRONIZADA ?? DOCS_LOCAL);
+const COMPARTIDA = SINCRONIZADA ?? DATOS;
 // Migración de datos de otra instalación solo si la configuración lo pide ("migrarDesde": nombre de la app vieja).
 const { migrar } = require('./migrar.cjs');
 const MIGRACION = CONF.migrarDesde
@@ -35,9 +40,15 @@ const MIGRACION = CONF.migrarDesde
       viejo: path.join(app.getPath('appData'), CONF.migrarDesde),
       nuevo: DATOS,
       docsViejo: path.join(app.getPath('documents'), CONF.migrarDesde),
-      docsNuevo: DOCS,
+      docsNuevo: DOCS_LOCAL,
     })
   : null;
+// Primera vez con la carpeta sincronizada: se copia allí lo que este equipo tuviera (sin sobrescribir nada).
+try {
+  if (!process.env.STUDIO_DOCS) llevarASincronizada({ datos: DATOS, docsLocal: DOCS_LOCAL, destino: SINCRONIZADA });
+} catch (e) {
+  console.error('No se pudo copiar a la biblioteca sincronizada:', e);
+}
 const RECIENTES = path.join(DATOS, 'recientes.json');
 const ICONO = path.join(RAIZ, 'build', process.platform === 'win32' ? 'icon.ico' : 'icon.png');
 
@@ -142,6 +153,8 @@ const arrancarServidor = async (dir) => {
       ...process.env,
       ELECTRON_RUN_AS_NODE: '1',
       STUDIO_DATOS: DATOS,
+      STUDIO_COMPARTIDA: COMPARTIDA,
+      STUDIO_DOCS_APP: DOCS,
       STUDIO_PROYECTOS: process.env.STUDIO_PROYECTOS ?? path.join(DOCS, 'Videos'),
       NODE_ENV: 'production',
     },

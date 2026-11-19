@@ -84,4 +84,4 @@ const migrar = ({ viejo, nuevo, docsViejo, docsNuevo }) => {
   }
 };
 
-module.exports = { migrar, ELEMENTOS };
+module.exports = { migrar, copiar, ELEMENTOS };

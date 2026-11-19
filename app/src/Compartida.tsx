@@ -1,5 +1,6 @@
 /**
- * Biblioteca compartida (todos los proyectos): logos, música, efectos, tipografías y escenas plantilla. «Usar» copia
+ * Biblioteca compartida (todos los proyectos y equipos): logos, gráficos, clips, música, efectos, tipografías y escenas
+ * plantilla. «Usar» copia
  * el archivo al proyecto abierto. Exportar / importar como .zip (al importar se hace antes una copia de seguridad).
  */
 import React, { useEffect, useRef, useState } from 'react';
@@ -11,9 +12,11 @@ import { pedirTexto } from './menus';
 import { escenaObjetivo, insertarEscena } from './Biblioteca';
 
 type Item = { nombre: string; tam: number; mtime: number; datos?: any };
-type Datos = { carpeta: string; logos: Item[]; musica: Item[]; sfx: Item[]; fuentes: Item[]; plantillas: Item[] };
+type Datos = { carpeta: string; logos: Item[]; graficos: Item[]; clips: Item[]; musica: Item[]; sfx: Item[]; fuentes: Item[]; plantillas: Item[] };
 const SECCIONES: [keyof Omit<Datos, 'carpeta'>, string, string][] = [
   ['logos', 'Logos', 'image/*'],
+  ['graficos', 'Gráficos e imágenes', 'image/*'],
+  ['clips', 'Clips de vídeo', 'video/*'],
   ['musica', 'Música', 'audio/*'],
   ['sfx', 'Efectos de sonido', 'audio/*'],
   ['fuentes', 'Tipografías propias', '.woff2,.woff,.ttf,.otf'],
@@ -65,7 +68,7 @@ export const PanelCompartida: React.FC = () => {
   const p = useEd((x) => x.proyecto)!;
   return (
     <div className="seccion" data-prueba="compartida">
-      <h4>Biblioteca compartida (todos los proyectos)</h4>
+      <h4>Biblioteca compartida (todos los proyectos y equipos)</h4>
       <div className="ayuda">En {d?.carpeta}. Los colores y fuentes se guardan como kits de marca (pestaña Marca).</div>
       <div className="fila" style={{ gap: 6, flexWrap: 'wrap', margin: '6px 0' }}>
         <a className="btn chico" href="/api/compartida/exportar" data-prueba="exportar-biblioteca">
@@ -132,8 +135,8 @@ export const PanelCompartida: React.FC = () => {
           </div>
           {(d?.[t] ?? []).map((it) => (
             <div key={it.nombre} className="item" style={{ cursor: 'default', padding: '3px 6px' }} data-item-compartido={`${t}/${it.nombre}`}>
-              {t === 'logos' ? (
-                <img src={`/compartida/logos/${encodeURIComponent(it.nombre)}`} alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
+              {t === 'logos' || t === 'graficos' ? (
+                <img loading="lazy" src={`/compartida/${t}/${encodeURIComponent(it.nombre)}`} alt="" style={{ width: 26, height: 26, objectFit: 'contain' }} />
               ) : t === 'musica' || t === 'sfx' ? (
                 <button
                   className="btn-r"
@@ -146,7 +149,7 @@ export const PanelCompartida: React.FC = () => {
                   <Ico n="play" s={12} />
                 </button>
               ) : (
-                <Ico n={t === 'fuentes' ? 'fuente' : 'plantillas'} s={14} />
+                <Ico n={t === 'fuentes' ? 'fuente' : t === 'clips' ? 'medios' : 'plantillas'} s={14} />
               )}
               <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.datos?.nombre ?? it.nombre}</span>
               <button className="btn chico" onClick={() => usar(t, it)} data-usar={`${t}/${it.nombre}`}>

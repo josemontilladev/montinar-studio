@@ -1,18 +1,21 @@
 /**
- * Biblioteca compartida entre proyectos (en los datos de la app, %APPDATA%\Montinar Studio\biblioteca): logos,
- * música, efectos de sonido, tipografías y escenas plantilla; los colores y fuentes van en los kits de marca. Se puede
+ * Biblioteca compartida entre proyectos (en la carpeta sincronizada de `dev`, «studio-biblioteca/biblioteca», o en los
+ * datos de la app si el equipo no la tiene): logos, gráficos, clips, música, efectos de sonido, tipografías y escenas
+ * plantilla; los colores y fuentes van en los kits de marca. Se puede
  * exportar e importar como .zip (al importar se guarda antes una copia de seguridad).
  */
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFile } from 'node:child_process';
 import type express from 'express';
-import { DATOS, rutas } from './config';
+import { COMPARTIDA, DATOS, rutas } from './config';
 import { nombreSeguro, rutaPublica } from './medios';
 
-const BIB = path.join(DATOS, 'biblioteca');
+export const BIB = path.join(COMPARTIDA, 'biblioteca');
 export const TIPOS_BIB: Record<string, { carpeta: string; destino: string; ext: RegExp }> = {
   logos: { carpeta: 'logos', destino: 'imagenes/logos', ext: /\.(png|jpe?g|webp|svg|avif)$/i },
+  graficos: { carpeta: 'graficos', destino: 'imagenes/graficos', ext: /\.(png|jpe?g|webp|svg|avif|gif)$/i },
+  clips: { carpeta: 'clips', destino: 'video/clips', ext: /\.(mp4|webm|mov|m4v)$/i },
   musica: { carpeta: 'musica', destino: 'audio/musica', ext: /\.(wav|mp3|m4a|aac|ogg|flac)$/i },
   sfx: { carpeta: 'sfx', destino: 'audio/sfx', ext: /\.(wav|mp3|m4a|aac|ogg|flac)$/i },
   fuentes: { carpeta: 'fuentes', destino: 'fuentes/propias', ext: /\.(woff2?|ttf|otf)$/i },
@@ -125,7 +128,7 @@ export const registrarCompartida = (app: express.Express, err: (res: express.Res
     new Promise<void>((ok, ko) => {
       fs.mkdirSync(BIB, { recursive: true });
       fs.mkdirSync(rutas.marcas, { recursive: true });
-      execFile(TAR, ['-a', '-c', '-f', dest, '-C', DATOS, 'biblioteca', path.relative(DATOS, rutas.marcas) || 'marcas'], { windowsHide: true }, (e, _o, se) => (e ? ko(new Error(String(se || e.message))) : ok()));
+      execFile(TAR, ['-a', '-c', '-f', dest, '-C', COMPARTIDA, 'biblioteca', path.relative(COMPARTIDA, rutas.marcas) || 'marcas'], { windowsHide: true }, (e, _o, se) => (e ? ko(new Error(String(se || e.message))) : ok()));
     });
   app.get('/api/compartida/exportar', async (_req, res) => {
     try {
@@ -156,7 +159,7 @@ export const registrarCompartida = (app: express.Express, err: (res: express.Res
       const lista = await new Promise<string>((ok, ko) => execFile(TAR, ['-t', '-f', f], { windowsHide: true, maxBuffer: 1 << 24 }, (e, o) => (e ? ko(e) : ok(o))));
       const malas = lista.split(/\r?\n/).filter((x) => x && !/^(biblioteca|marcas)(\/|$)/.test(x.replace(/\\/g, '/')));
       if (malas.length) throw new Error(`El .zip no es una biblioteca de MétricaSEO Studio (${malas.slice(0, 3).join(', ')})`);
-      await new Promise<void>((ok, ko) => execFile(TAR, ['-x', '-f', f, '-C', DATOS], { windowsHide: true }, (e, _o, se) => (e ? ko(new Error(String(se || e.message))) : ok())));
+      await new Promise<void>((ok, ko) => execFile(TAR, ['-x', '-f', f, '-C', COMPARTIDA], { windowsHide: true }, (e, _o, se) => (e ? ko(new Error(String(se || e.message))) : ok())));
       fs.rmSync(f, { force: true });
       res.json({ ok: true, copia });
     } catch (e) {

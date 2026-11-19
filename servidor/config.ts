@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 export const EDITOR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /** Datos que se escriben (caché, kits de marca): en la app de escritorio, la carpeta del usuario (STUDIO_DATOS). */
 export const DATOS = process.env.STUDIO_DATOS ?? EDITOR;
+/** Biblioteca compartida, kits de marca y estilos propios: la carpeta sincronizada de `dev` si la hay (STUDIO_COMPARTIDA). */
+export const COMPARTIDA = process.env.STUDIO_COMPARTIDA ?? DATOS;
 
 export type Descriptor = {
   nombre: string;
@@ -63,8 +65,8 @@ export const rutas = {
   versiones: path.resolve(PROY, '.versiones'),
   entrada: path.resolve(PROY, DESC.entrada),
   cache: path.join(DATOS, '.cache'),
-  marcas: path.join(DATOS, 'marcas'),
-  estilosUsuario: path.join(DATOS, 'estilos-usuario.json'),
+  marcas: path.join(COMPARTIDA, 'marcas'),
+  estilosUsuario: path.join(COMPARTIDA, 'estilos-usuario.json'),
 };
 
 /** ffmpeg / ffprobe: los que trae Remotion en el proyecto (o los del PATH). */

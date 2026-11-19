@@ -9,12 +9,20 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import express from 'express';
 import { validarDiseno } from '../app/diseno/esquema';
+import { BIB } from './compartida';
 
 const DOCS = process.env.STUDIO_DOCS_APP ?? path.join(os.homedir(), 'Documents', 'MetricaSEO Studio');
 export const CARPETA_DISENOS = path.join(DOCS, 'Diseños');
 export const CARPETA_EXPORTAR = process.env.STUDIO_DESCARGAS ?? path.join(os.homedir(), 'Downloads', 'MetricaSEO Studio');
 const PAPELERA = path.join(CARPETA_DISENOS, '.papelera');
 const IMG = /\.(png|jpe?g|webp|gif|avif|svg)$/i;
+/** Id ficticio de la biblioteca compartida en «Mis imágenes»: sus logos y gráficos se usan como los de otro diseño. */
+const BIBLIOTECA = '@biblioteca';
+const enBiblioteca = (src: string) => {
+  const f = path.resolve(BIB, src);
+  if (!/^(logos|graficos)[\\/]/.test(path.relative(BIB, f)) || !IMG.test(f)) throw new Error('Ruta no válida');
+  return f;
+};
 
 type Err = (res: express.Response, e: any, code?: number) => void;
 
@@ -187,6 +195,12 @@ export const registrarDisenos = (app: express.Express, err: Err) => {
         if (!fs.existsSync(r)) continue;
         for (const f of fs.readdirSync(r)) if (IMG.test(f)) out.push({ id: d.id, src: `recursos/${f}`, nombre: f, mtime: fs.statSync(path.join(r, f)).mtimeMs });
       }
+      // y los logos y gráficos de la biblioteca compartida (sincronizada entre equipos)
+      for (const t of ['logos', 'graficos']) {
+        const r = path.join(BIB, t);
+        if (!fs.existsSync(r)) continue;
+        for (const f of fs.readdirSync(r)) if (IMG.test(f)) out.push({ id: BIBLIOTECA, src: `${t}/${f}`, nombre: f, mtime: fs.statSync(path.join(r, f)).mtimeMs });
+      }
       return out.sort((a, b) => b.mtime - a.mtime);
     }),
   );
@@ -196,8 +210,9 @@ export const registrarDisenos = (app: express.Express, err: Err) => {
     '/api/disenos/:id/importar',
     ruta((req) => {
       const dir = carpeta(String(req.params.id));
-      const de = carpeta(String(req.body?.de ?? ''));
-      const src = dentro(de, String(req.body?.src ?? ''));
+      const desdeBib = req.body?.de === BIBLIOTECA;
+      const de = desdeBib ? BIB : carpeta(String(req.body?.de ?? ''));
+      const src = desdeBib ? enBiblioteca(String(req.body?.src ?? '')) : dentro(de, String(req.body?.src ?? ''));
       if (!fs.existsSync(src) || !IMG.test(src)) throw new Error('No existe esa imagen');
       if (de === dir) return { src: String(req.body.src) };
       fs.mkdirSync(path.join(dir, 'recursos'), { recursive: true });
@@ -209,7 +224,8 @@ export const registrarDisenos = (app: express.Express, err: Err) => {
 
   app.get('/api/disenos/:id/recurso', (req, res) => {
     try {
-      const f = dentro(carpeta(String(req.params.id)), String(req.query.f ?? ''));
+      const id = String(req.params.id);
+      const f = id === BIBLIOTECA ? enBiblioteca(String(req.query.f ?? '')) : dentro(carpeta(id), String(req.query.f ?? ''));
       if (!fs.existsSync(f)) return err(res, 'No existe', 404);
       res.set('Cache-Control', 'no-cache');
       res.sendFile(f);
