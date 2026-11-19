@@ -4,7 +4,7 @@ import { accion, enEscritorio } from './escritorio';
 import { useEd } from './estado';
 import { guardarAhora } from './guardado';
 
-export type EstadoAct = { estado: string; version: string; nueva?: string; notas?: string; progreso?: number; error?: string };
+export type EstadoAct = { estado: string; version: string; nueva?: string; notas?: string; progreso?: number; error?: string; detalle?: string };
 let ultimo: EstadoAct | null = null;
 const oyentes = new Set<(e: EstadoAct) => void>();
 (window as any).__actualizacion = (e: EstadoAct) => {
@@ -18,7 +18,7 @@ export const buscarActualizaciones = async () => {
   const e: EstadoAct | null = await accion('buscar-actualizaciones');
   const t: Record<string, string> = {
     'sin-canal': 'No hay origen de actualizaciones configurado (ver LEEME → Actualizaciones)',
-    'sin-versiones': 'Todavía no hay ninguna versión publicada en la carpeta de actualizaciones',
+    'sin-versiones': e?.detalle ?? 'Todavía no hay ninguna versión publicada en la carpeta de actualizaciones',
     desarrollo: 'En modo desarrollo no se buscan actualizaciones',
     'no-disponible': 'El actualizador no está disponible en esta instalación',
     'al-dia': `Estás en la última versión (${e?.version})`,

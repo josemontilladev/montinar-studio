@@ -307,19 +307,26 @@ npm run release -- --notas "Qué cambia"  # texto que la app enseña en «Noveda
 
 Tarda unos minutos (el instalador pesa unos 300 MB). Después, `git commit -am "Versión X"`.
 
-**El origen.** Está en `electron/estudio.config.json → actualizaciones`. Por defecto es una carpeta de este equipo:
+**El origen.** Está en `electron/estudio.config.json → actualizaciones`. Por defecto son dos carpetas:
 
 ```json
-{ "proveedor": "carpeta", "ruta": "C:/Users/KronnicxZ/Instaladores/MetricaSEO Studio/actualizaciones" }
+{ "proveedor": "carpeta", "rutas": ["dev/Metrica SEO/studio-actualizaciones", "C:/Users/KronnicxZ/Instaladores/MetricaSEO Studio/actualizaciones"] }
 ```
 
-`npm run release` deja ahí el instalador, su `.blockmap` y `latest.yml` (solo la última versión). No sale nada a
-internet: la app sirve esa carpeta a su actualizador por una dirección que solo existe dentro del equipo (127.0.0.1).
-Otros orígenes posibles:
+- La primera está dentro de `dev`, que Syncthing lleva a todos los equipos. Es relativa: se resuelve desde la carpeta
+  personal de cada equipo (`C:\Users\<usuario>\dev\…`), así vale aunque el usuario de Windows se llame distinto.
+- La segunda es la carpeta local de antes; se mantiene para equipos que no sincronicen `dev`.
+- La app usa la que tenga la versión más alta **completa**: con Syncthing, `latest.yml` puede llegar antes que el
+  instalador, y hasta que el instalador no está entero (del tamaño que dice `latest.yml`) no se intenta descargar.
+  Al descargar, electron-updater comprueba además su huella SHA-512.
 
-- **Carpeta sincronizada o de red**, para varios equipos: la misma configuración con una ruta que vean todos (una
-  carpeta de Syncthing o `//servidor/carpeta`). Dentro de `dev` no puede llamarse `build`, `dist`, `out`, `bin` ni
-  `target` (Syncthing las ignora), y cada versión son unos 300 MB que se sincronizan.
+`npm run release` deja en la primera carpeta (y en las demás que ya existan en este equipo) el instalador, su
+`.blockmap` y `latest.yml`, solo la última versión. Copia cada archivo con un nombre acabado en `~` (Syncthing no lo
+sincroniza) y lo renombra al final, y escribe `latest.yml` el último. No sale nada a internet: la app sirve la carpeta
+a su actualizador por una dirección que solo existe dentro del equipo (127.0.0.1). Otros orígenes posibles:
+
+- **Otra carpeta sincronizada o de red**: dentro de `dev` no puede llamarse `build`, `dist`, `out`, `bin` ni `target`
+  (Syncthing las ignora), y cada versión son unos 300 MB que se sincronizan.
 - **Servidor propio** (por ejemplo un bucket con dominio): `{ "proveedor": "generic", "url": "https://…/studio/" }`.
   `npm run release` compila y dice qué tres archivos hay que subir; no sube nada.
 - **GitHub**: `{ "proveedor": "github", "owner": "…", "repo": "…" }`, solo con un repositorio **público**. Uno privado
@@ -335,8 +342,19 @@ con el mismo formato, manda sobre la configuración.
   SHA-512 de `latest.yml`), pero Windows SmartScreen puede avisar al instalar a mano y, sin firma, nada garantiza a un
   tercero quién publicó la actualización: quien pueda escribir en el origen puede publicar una versión. Con una
   carpeta propia eso es aceptable; con un origen en internet conviene firmar (ver abajo).
-- El origen por defecto solo sirve a este equipo. En otro equipo la app dirá «Todavía no hay ninguna versión
-  publicada» hasta que se le dé un origen que vea.
+- Las versiones 2.2.0 y 2.2.1 solo miran la carpeta local de este equipo: en otro equipo hay que instalar a mano una
+  vez la 2.2.2 o posterior (está en `dev\Metrica SEO\studio-actualizaciones`). A partir de ella se actualiza sola.
+
+## En otro equipo (por ejemplo, la laptop)
+
+- **Proyectos de vídeo**: la app los busca en la carpeta sincronizada `C:\Users\<usuario>\dev\Metrica SEO\metricaseo-promo\editables`
+  (además de los recientes de ese equipo y de `Documentos\MetricaSEO Studio\Videos`). Si no encuentra ninguno ya no
+  pide una carpeta al abrir: entra en el estudio de diseño con un aviso y los botones «Volver a buscar» y «Elegir
+  carpeta del proyecto…».
+- **No hace falta `npm install` en el kit**: Syncthing no sincroniza `node_modules`, así que la vista previa y la
+  exportación usan los paquetes que trae la app (Remotion, React, lucide-react…) cuando el kit no tiene los suyos.
+- **Voz y subtítulos automáticos** necesitan Python y sus paquetes en ese equipo (ver Dependencias). Los diseños del
+  estudio se guardan en `Documentos\MetricaSEO Studio\Diseños` de cada equipo y no se sincronizan.
 
 ## Firma de código (para quitar el aviso de SmartScreen)
 

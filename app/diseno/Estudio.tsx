@@ -5,6 +5,7 @@ import { apiDisenos } from './api';
 import { avisar, CapaUi, ElegirFormato, pedirTexto } from './Dialogos';
 import { Galeria } from './Galeria';
 import { Editor } from './editor/Editor';
+import { AvisoSinProyecto, useSinProyecto } from './AvisoSinProyecto';
 
 const param = (k: string) => new URLSearchParams(location.search).get(k);
 const ponerUrl = (q: string) => history.replaceState(null, '', `/diseno.html${q}`);
@@ -14,6 +15,15 @@ export function Estudio() {
   const [abierto, setAbierto] = useState<{ id: string; doc: Diseno; clave: number } | null>(null);
   const [elegir, setElegir] = useState(false);
   const [cargando, setCargando] = useState(!!param('d'));
+  // sin proyecto de vídeo (otro equipo sin la carpeta dev sincronizada): el editor de vídeo no puede abrirse
+  const sinProyecto = useSinProyecto();
+  const aVideo = useCallback(() => {
+    if (sinProyecto?.sinProyecto) {
+      avisar('No hay ningún proyecto de vídeo en este equipo: mira el aviso de «Mis diseños».', 'info');
+      return;
+    }
+    irAVideo();
+  }, [sinProyecto]);
 
   const abrir = useCallback(async (id: string) => {
     try {
@@ -79,13 +89,13 @@ export function Estudio() {
   return (
     <>
       {abierto ? (
-        <Editor key={abierto.clave} id={abierto.id} inicial={abierto.doc} onSalir={galeria} onVideo={irAVideo} onRenombrado={(id, doc) => (setAbierto({ id, doc, clave: abierto.clave }), ponerUrl(`?d=${encodeURIComponent(id)}`))} />
+        <Editor key={abierto.clave} id={abierto.id} inicial={abierto.doc} onSalir={galeria} onVideo={aVideo} onRenombrado={(id, doc) => (setAbierto({ id, doc, clave: abierto.clave }), ponerUrl(`?d=${encodeURIComponent(id)}`))} />
       ) : cargando ? (
         <div className="grid h-full place-items-center">
           <span className="loading loading-spinner text-primary" />
         </div>
       ) : (
-        <Galeria onAbrir={abrir} onNuevo={nuevo} onVideo={irAVideo} />
+        <Galeria onAbrir={abrir} onNuevo={nuevo} onVideo={aVideo} aviso={sinProyecto?.sinProyecto ? <AvisoSinProyecto estado={sinProyecto} /> : null} />
       )}
       {elegir ? (
         <ElegirFormato

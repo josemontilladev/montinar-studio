@@ -76,12 +76,27 @@ const recordar = (p) => {
   fs.mkdirSync(DATOS, { recursive: true });
   fs.writeFileSync(RECIENTES, JSON.stringify(r, null, 1));
 };
-const esProyecto = (dir) => fs.existsSync(path.join(dir, 'editor.json')) || fs.existsSync(path.join(dir, 'proyecto.json'));
+const { esProyecto, candidatosProyecto, primerProyecto, KIT_EDITABLES } = require('./rutas.cjs');
+/** Carpeta donde deberían estar los proyectos de vídeo en este equipo (la de `dev`, sincronizada). */
+const KIT = path.join(app.getPath('home'), ...KIT_EDITABLES);
 const proyectoInicial = () => {
   const arg = process.argv.find((a, i) => process.argv[i - 1] === '--proyecto');
-  for (const c of [arg, ...leerRecientes(), CONF.proyectoPorDefecto, path.resolve(RAIZ, '..', 'metricaseo-promo', 'editables', 'promo-agencias-16x9')]) if (c && fs.existsSync(c) && esProyecto(c)) return c;
-  return null;
+  // STUDIO_SIN_KIT=1 simula un equipo sin la carpeta sincronizada (pruebas)
+  if (process.env.STUDIO_SIN_KIT === '1') return arg && esProyecto(arg) ? arg : null;
+  return primerProyecto(
+    candidatosProyecto({
+      arg,
+      recientes: leerRecientes(),
+      porDefecto: CONF.proyectoPorDefecto,
+      home: app.getPath('home'),
+      docsVideos: path.join(DOCS, 'Videos'),
+      raiz: RAIZ,
+    }),
+  );
 };
+/** Sin proyecto de vídeo: el servidor arranca igual (el estudio de diseño no lo necesita) con esta carpeta vacía. */
+const SIN_PROYECTO = path.join(DATOS, 'sin-proyecto');
+const haySinProyecto = () => proyecto === SIN_PROYECTO;
 
 // ——— servidor ———
 const libre = (desde) =>
@@ -146,7 +161,7 @@ const arrancarServidor = async (dir) => {
   });
   await esperar(`http://127.0.0.1:${puerto}/api/estado`, 90000);
   proyecto = dir;
-  recordar(dir);
+  if (dir !== SIN_PROYECTO) recordar(dir);
 };
 
 // ——— ventanas ———
@@ -179,7 +194,7 @@ const abrirVentana = () => {
     titleBarOverlay: barraMarca(),
     webPreferences: { contextIsolation: true, sandbox: true, preload: path.join(__dirname, 'preload.cjs') },
   });
-  ventana.loadURL(`http://127.0.0.1:${puerto}/`);
+  ventana.loadURL(urlInicial());
   ventana.once('ready-to-show', () => {
     ventana.maximize();
     ventana.show();
@@ -199,23 +214,28 @@ const abrirVentana = () => {
   });
   ventana.on('page-title-updated', (e) => {
     e.preventDefault();
-    ventana.setTitle(`${NOMBRE} — ${path.basename(proyecto)}`);
+    ventana.setTitle(tituloVentana());
   });
   ventana.webContents.setWindowOpenHandler(({ url }) => {
     // vídeos exportados y enlaces: en el reproductor / navegador del sistema
-    if (url.includes('/salidas/')) {
+    if (url.includes('/salidas/') && !haySinProyecto()) {
       const rel = decodeURIComponent(url.split('/salidas/')[1]);
       shell.openPath(path.join(proyecto, 'out', 'editor', rel));
     } else shell.openExternal(url);
     return { action: 'deny' };
   });
-  ventana.setTitle(`${NOMBRE} — ${path.basename(proyecto)}`);
+  ventana.setTitle(tituloVentana());
 };
+
+const tituloVentana = () => (haySinProyecto() || !proyecto ? NOMBRE : `${NOMBRE} — ${path.basename(proyecto)}`);
+/** Sin proyecto de vídeo, la app abre en el estudio de diseño con el aviso de dónde buscarlos. */
+const urlInicial = () => `http://127.0.0.1:${puerto}/${haySinProyecto() ? 'diseno.html' : ''}`;
 
 const ejecutarEnEditor = (js) => ventana?.webContents.executeJavaScript(js).catch(() => {});
 // Inicio vive en el editor de vídeo: desde el estudio de diseño hay que volver a esa página primero.
 const irAInicio = async () => {
   const url = ventana?.webContents.getURL() ?? '';
+  if (haySinProyecto()) return void ventana?.loadURL(urlInicial());
   if (url.includes('/diseno')) {
     await ventana.loadURL(`http://127.0.0.1:${puerto}/?inicio=1`);
     return;
@@ -236,8 +256,8 @@ const abrirProyecto = async (dir) => {
   await ejecutarEnEditor('window.__guardar && window.__guardar()');
   pantallaCarga();
   await arrancarServidor(dir);
-  ventana.loadURL(`http://127.0.0.1:${puerto}/`);
-  ventana.setTitle(`${NOMBRE} — ${path.basename(dir)}`);
+  ventana.loadURL(urlInicial());
+  ventana.setTitle(tituloVentana());
   carga?.close();
   carga = null;
   menu();
@@ -257,8 +277,8 @@ const menu = () => {
         { label: 'Exportar…', accelerator: 'CmdOrCtrl+E', click: () => ejecutarEnEditor("window.__ed.setState({ dialogo: 'exportar' })") },
         { label: 'Versiones…', click: () => ejecutarEnEditor("window.__ed.setState({ dialogo: 'versiones' })") },
         { type: 'separator' },
-        { label: 'Abrir carpeta de salida', click: () => { const d = path.join(proyecto, 'out', 'editor'); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
-        { label: 'Abrir carpeta del proyecto', click: () => shell.openPath(proyecto) },
+        { label: 'Abrir carpeta de salida', enabled: !haySinProyecto(), click: () => { const d = path.join(proyecto, 'out', 'editor'); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
+        { label: 'Abrir carpeta del proyecto', enabled: !haySinProyecto(), click: () => shell.openPath(proyecto) },
         { type: 'separator' },
         { label: 'Salir', role: 'quit' },
       ],
@@ -317,7 +337,16 @@ const menu = () => {
 ipcMain.handle('accion', async (_e, a, x) => {
   if (a === 'recientes') return leerRecientes();
   if (a === 'abrir') return abrirProyecto(x);
+  // sin proyecto de vídeo: estado para el aviso, volver a buscar (p. ej. al terminar de sincronizar) y elegir carpeta
+  if (a === 'proyecto-estado') return { sinProyecto: haySinProyecto(), kit: KIT, kitExiste: fs.existsSync(KIT) };
+  if (a === 'buscar-proyectos') {
+    const dir = proyectoInicial();
+    if (!dir) return false;
+    await abrirProyecto(dir);
+    return true;
+  }
   if (a === 'salida') {
+    if (haySinProyecto()) return false;
     const d = path.join(proyecto, 'out', 'editor');
     fs.mkdirSync(d, { recursive: true });
     return shell.openPath(d);
@@ -367,11 +396,12 @@ app.whenReady().then(async () => {
     cb(f ? { video: f } : {});
   });
   pantallaCarga();
+  // sin ningún proyecto de vídeo en este equipo (p. ej. la carpeta dev aún no se ha sincronizado) la app abre
+  // igual, en el estudio de diseño, con un aviso para buscarlos; ya no obliga a elegir una carpeta
   let dir = proyectoInicial();
   if (!dir) {
-    const r = await dialog.showOpenDialog({ title: `${NOMBRE}: elige la carpeta del proyecto`, properties: ['openDirectory'] });
-    if (r.canceled) return app.quit();
-    dir = r.filePaths[0];
+    fs.mkdirSync(SIN_PROYECTO, { recursive: true });
+    dir = SIN_PROYECTO;
   }
   try {
     await arrancarServidor(dir);

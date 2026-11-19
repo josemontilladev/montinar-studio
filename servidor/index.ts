@@ -40,7 +40,9 @@ app.get('/api/dependencias', async (_req, res) => {
 });
 
 app.get('/api/estado', (_req, res) => {
-  res.json({ proyecto: PROY, descriptor: DESC, contratoIgual: contratoIgual(), mtime: fs.existsSync(rutas.proyecto) ? fs.statSync(rutas.proyecto).mtimeMs : 0, picosSeg: PICOS_SEG });
+  // sinProyecto: la app de escritorio arrancó sin proyecto de vídeo (solo el estudio de diseño es utilizable)
+  const sinProyecto = !fs.existsSync(rutas.proyecto);
+  res.json({ proyecto: PROY, descriptor: DESC, contratoIgual: !sinProyecto && contratoIgual(), mtime: sinProyecto ? 0 : fs.statSync(rutas.proyecto).mtimeMs, picosSeg: PICOS_SEG, sinProyecto });
 });
 
 app.get('/api/proyecto', (_req, res) => {
@@ -595,12 +597,32 @@ app.get('/__studio/icon.png', (_req, res) => res.sendFile(path.join(EDITOR, 'bui
 
 // ——— Interfaz (Vite) ———
 
+/**
+ * El código del proyecto (p. ej. metricaseo-promo/src) importa remotion, lucide-react… desde su propia carpeta.
+ * En otro equipo esa carpeta llega por Syncthing SIN node_modules: si un paquete no se encuentra desde el
+ * proyecto, se usa el que trae la app (misma versión de Remotion). Con node_modules en el proyecto no cambia nada.
+ */
+const paquetesDeLaApp = () => {
+  const desdeApp = path.join(EDITOR, 'app', 'main.tsx');
+  return {
+    name: 'studio-paquetes-de-la-app',
+    enforce: 'pre' as const,
+    async resolveId(this: any, fuente: string, importador: string | undefined, opciones: any) {
+      if (!importador || /^[./\\]|^[a-zA-Z]:|^\0|^@proyecto|^@contrato|^\/@/.test(fuente)) return null;
+      if (path.resolve(importador).startsWith(EDITOR + path.sep)) return null;
+      const propio = await this.resolve(fuente, importador, { ...opciones, skipSelf: true });
+      if (propio) return propio;
+      return this.resolve(fuente, desdeApp, { ...opciones, skipSelf: true });
+    },
+  };
+};
+
 const vite = await createVite({
   configFile: false,
   root: path.join(EDITOR, 'app'),
   publicDir: rutas.publico,
   // Tailwind solo procesa los CSS que lo importan (app/diseno/estilos.css): el editor de vídeo no cambia
-  plugins: [react(), tailwind()],
+  plugins: [react(), tailwind(), paquetesDeLaApp()],
   resolve: {
     alias: { '@proyecto': rutas.entrada, '@contrato': path.join(EDITOR, 'contrato') },
     dedupe: ['react', 'react-dom', 'remotion', '@remotion/player', '@remotion/google-fonts', '@remotion/paths', '@remotion/media-utils', 'zod'],

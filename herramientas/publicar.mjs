@@ -10,12 +10,17 @@
  * Qué hace: comprueba tipos, sube "version" en package.json, compila el instalador (`npm run dist`)
  * y copia al origen los tres archivos que lee la app: el instalador, su .blockmap y latest.yml.
  * El origen es "actualizaciones" de electron/estudio.config.json. Con proveedor "carpeta" se copian
- * ahí; con "generic" o "github" quedan listos en la carpeta de salida para subirlos a mano (este
- * script no sube nada a internet).
+ * a sus carpetas ("rutas"; las relativas o con «~/» desde la carpeta personal de este equipo):
+ *   - la primera se crea si no existe (es la de `dev`, que Syncthing lleva al otro equipo);
+ *   - las demás solo si ya existen en este equipo (p. ej. la carpeta local de antes, para que la
+ *     versión instalada aquí, que aún lee esa, dé el salto).
+ * Con "generic" o "github" quedan listos en la carpeta de salida para subirlos a mano (este script
+ * no sube nada a internet).
  */
 import { execSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, isAbsolute, join, normalize, resolve } from 'node:path';
+import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -75,25 +80,38 @@ if (notas) {
 const archivos = [instalador, `${instalador}.blockmap`, 'latest.yml'].filter((a) => existsSync(join(salida, a)));
 const mb = (f) => `${(statSync(f).size / 1048576).toFixed(1)} MB`;
 
-if (canal?.proveedor === 'carpeta' && canal.ruta) {
-  mkdirSync(canal.ruta, { recursive: true });
-  // primero el instalador y al final latest.yml: la app nunca ve una versión a medio copiar
-  for (const a of archivos) {
-    copyFileSync(join(salida, a), join(canal.ruta, `${a}.tmp`));
-    rmSync(join(canal.ruta, a), { force: true });
-    copyFileSync(join(canal.ruta, `${a}.tmp`), join(canal.ruta, a));
-    rmSync(join(canal.ruta, `${a}.tmp`), { force: true });
-    console.log(`▸ Copiado ${a} (${mb(join(canal.ruta, a))})`);
-  }
-  // solo se guarda la última versión: cada instalador pesa unos 300 MB
-  for (const viejo of readdirSync(canal.ruta)) {
-    if (/\.(exe|blockmap|tmp)$/i.test(viejo) && !archivos.includes(viejo)) {
-      rmSync(join(canal.ruta, viejo), { force: true });
-      console.log(`▸ Quitado el instalador anterior ${viejo}`);
+const resolverRuta = (r) => {
+  const t = String(r ?? '').trim();
+  if (!t) return null;
+  if (t === '~' || t.startsWith('~/') || t.startsWith('~\\')) return join(homedir(), t.slice(2));
+  return isAbsolute(t) ? normalize(t) : join(homedir(), t);
+};
+const carpetas = canal?.proveedor === 'carpeta' ? [...(canal.rutas ?? []), canal.ruta].map(resolverRuta).filter(Boolean) : [];
+
+if (carpetas.length) {
+  const destinos = carpetas.filter((c, i) => i === 0 || existsSync(c));
+  for (const destino of destinos) {
+    mkdirSync(destino, { recursive: true });
+    // primero el instalador y al final latest.yml: la app nunca ve una versión a medio copiar. Se copia con
+    // un nombre acabado en «~» (Syncthing no lo sincroniza) y se renombra al final.
+    for (const a of archivos) {
+      const temporal = join(destino, `${a}~`);
+      copyFileSync(join(salida, a), temporal);
+      rmSync(join(destino, a), { force: true });
+      renameSync(temporal, join(destino, a));
+      console.log(`▸ ${destino}: copiado ${a} (${mb(join(destino, a))})`);
+    }
+    // solo se guarda la última versión: cada instalador pesa unos 300 MB
+    for (const viejo of readdirSync(destino)) {
+      if (/\.(exe|blockmap|tmp)$|~$/i.test(viejo) && !archivos.includes(viejo)) {
+        rmSync(join(destino, viejo), { force: true });
+        console.log(`▸ ${destino}: quitado ${viejo}`);
+      }
     }
   }
-  console.log(`\n✔ Versión ${version} publicada en ${canal.ruta}`);
-  console.log(`  Las apps instaladas que leen esa carpeta la descargan solas al abrirse (o en Menú → Buscar actualizaciones).`);
+  console.log(`\n✔ Versión ${version} publicada en:`);
+  for (const d of destinos) console.log(`    ${d}`);
+  console.log(`  Las apps instaladas que leen esas carpetas la descargan solas al abrirse (o en Menú → Buscar actualizaciones).`);
 } else {
   console.log(`\n✔ Versión ${version} compilada. Este script no sube nada a internet.`);
   console.log(`  Sube estos archivos a ${canal?.url ?? (canal?.proveedor === 'github' ? `una release v${version} de ${canal.owner}/${canal.repo}` : 'tu origen de actualizaciones')}:`);

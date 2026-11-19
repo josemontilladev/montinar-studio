@@ -11,6 +11,8 @@ const say = (o) => process.stdout.write(JSON.stringify(o) + '\n');
 // Remotion del proyecto (misma versión con la que se diseñó); si no lo tiene, el que trae el editor
 const reqProy = createRequire(path.join(conf.proyecto, 'package.json'));
 const reqEditor = createRequire(import.meta.url);
+/** Carpeta de la app (junto a sus node_modules). */
+const EDITOR_RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const resolver = (m) => {
   try {
     return reqProy.resolve(m);
@@ -77,6 +79,12 @@ try {
       entryPoint: conf.entrada,
       publicDir: conf.publico,
       outDir,
+      // el código del proyecto sin node_modules propios (llegó por Syncthing a otro equipo): sus paquetes
+      // se buscan primero junto a él y, si no están, en los que trae la app
+      webpackOverride: (c) => ({
+        ...c,
+        resolve: { ...c.resolve, modules: [...(c.resolve?.modules ?? ['node_modules']), path.join(EDITOR_RAIZ, 'node_modules')] },
+      }),
       onProgress: (p) => say({ tipo: 'progreso', p: 0.15 * (p / 100), etapa: `Preparando el proyecto (bundle) ${Math.round(p)} %` }),
     });
   } else say({ tipo: 'progreso', p: 0.15, etapa: 'Bundle en caché' });

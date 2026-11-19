@@ -1,5 +1,5 @@
 /** «Mis diseños»: crear desde un formato y abrir, duplicar, renombrar o borrar los diseños guardados. */
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Clapperboard, Copy, FolderOpen, MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react';
 import { BotonTema } from './tema';
 import { Logo } from '../marca/Logo';
@@ -15,7 +15,7 @@ export const hace = (t: number) => {
   return new Date(t).toLocaleDateString('es');
 };
 
-export function Galeria({ onAbrir, onNuevo, onVideo }: { onAbrir: (id: string) => void; onNuevo: (formato?: string) => void; onVideo: () => void }) {
+export function Galeria({ onAbrir, onNuevo, onVideo, aviso }: { onAbrir: (id: string) => void; onNuevo: (formato?: string) => void; onVideo: () => void; aviso?: ReactNode }) {
   const [datos, setDatos] = useState<{ carpeta: string; disenos: FichaDiseno[] } | null>(null);
   const [q, setQ] = useState('');
   const [menu, setMenu] = useState<string | null>(null);
@@ -57,6 +57,7 @@ export function Galeria({ onAbrir, onNuevo, onVideo }: { onAbrir: (id: string) =
         </button>
       </header>
       <div className="min-h-0 flex-1 overflow-y-auto px-8 pb-12">
+        {aviso}
         <h2 className="mb-3 mt-6 text-[0.8rem] font-semibold text-suave">Crear un diseño</h2>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2.5">
           {FORMATOS.map((f) => (
