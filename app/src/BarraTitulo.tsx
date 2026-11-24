@@ -102,6 +102,8 @@ export const BarraTitulo: React.FC = () => {
     // estudio de diseño (posts, carruseles, portadas): antes solo se llegaba desde Inicio o con el atajo
     { et: 'Nuevo diseño (post, carrusel, portada)…', ico: 'imagen', kbd: 'Ctrl+Shift+N', fn: () => irDiseno('?nuevo=1') },
     { et: 'Mis diseños', ico: 'plantillas', kbd: 'Ctrl+Shift+D', fn: () => irDiseno() },
+    // publicar en YouTube y LinkedIn desde el calendario (solo en la app de escritorio)
+    ...(studio ? ([{ et: 'Publicar en YouTube y LinkedIn…', ico: 'exportar', kbd: 'Ctrl+Shift+P', fn: () => studio!.accion('ir-publicar') }] as Item[]) : []),
     'sep',
     ...(studio
       ? ([

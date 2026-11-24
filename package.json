@@ -8,6 +8,7 @@
     "dev": "tsx servidor/index.ts",
     "start": "tsx servidor/index.ts",
     "typecheck": "tsc --noEmit -p .",
+    "test:publicar": "node --test \"electron/publicar/pruebas/*.test.cjs\"",
     "app": "npm run build:server && electron .",
     "build:server": "esbuild servidor/index.ts --bundle --platform=node --format=esm --target=node20 --packages=external --outfile=dist-server/index.mjs",
     "dist": "npm run chrome && npm run build:server && electron-builder --win nsis --publish never",
@@ -88,7 +89,8 @@
       "!node_modules/.remotion/**",
       "!node_modules/.vite/**",
       "!**/*.map",
-      "!.cache/**"
+      "!.cache/**",
+      "!electron/publicar/pruebas/**"
     ],
     "win": {
       "target": [

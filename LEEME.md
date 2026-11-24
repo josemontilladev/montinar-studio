@@ -288,6 +288,38 @@ Python local (sin servicios de pago): `faster-whisper`, `numpy`, `scipy`, `av`.
   Licencias en `LICENCIAS-MUSICA-Y-MODELOS.md`.
 - **Actualizaciones**: ver abajo. **Firma de código**: ver abajo.
 
+## Publicar en YouTube y LinkedIn
+
+Menú **Publicar** (o Menú › «Publicar en YouTube y LinkedIn…», **Ctrl+Shift+P**; en el estudio de diseño, botón «Publicar»).
+Lee el calendario de redes del centro de contenido sincronizado (`~/dev/Metrica SEO/centro-contenido/calendario-data.json`
+y sus `videos/` y `posts/`) y lista las publicaciones de YouTube y LinkedIn de las próximas dos semanas (o de todo el plan),
+más las atrasadas sin publicar. Cada una tiene vista previa, archivos (con aviso si aún no han sincronizado) y textos
+editables (título, descripción/texto, lista, primer comentario); lo editado se guarda en este equipo y se puede volver al
+texto del calendario.
+
+- **YouTube › «Subir y programar»**: sube el vídeo (por partes, reanudable), con título, descripción con enlaces UTM y
+  hashtags, etiquetas, categoría, «no es para niños», miniatura, subtítulos .srt en español y la lista de reproducción si
+  existe con ese nombre. Queda privado y YouTube lo publica a la hora del calendario (`publishAt`): no hace falta tener la
+  app abierta. Si la hora ya pasó, pide confirmación y lo publica al momento. Si algo secundario falla (miniatura,
+  subtítulos, lista), el vídeo queda subido y «Reintentar lo que faltó» no lo vuelve a subir.
+- **LinkedIn (perfil personal) › «Publicar ahora»** o **«Publicar a su hora»**: post con imagen, vídeo o carrusel como
+  documento PDF (la app lo genera con las imágenes; «Ver el PDF» lo enseña antes) y primer comentario. LinkedIn no
+  programa por API: «a su hora» deja el post en una cola de este equipo que se publica **solo si la app está abierta**
+  (el equipo no se suspende mientras haya cola). Si la hora pasa con la app cerrada, al abrirla pide confirmación.
+- **Estados**: pendiente, atrasada, en cola, enviando, programada, publicada (con enlace) o error (con el motivo:
+  cuota agotada y cuándo se reinicia, permiso caducado, límites de tamaño, vídeo que quedó en privado…).
+- **Horas**: el plan de redes fija las horas en UTC−5 (`timeBase` del calendario). Se enseñan en tu zona
+  (America/Caracas por defecto) y ambas se cambian en Ajustes · Redes.
+
+**Ajustes · Redes** (pestaña de la misma pantalla): ahí se pegan el ID y el secreto de cliente de Google Cloud y de
+LinkedIn Developers (con los pasos para crearlos) y se conecta cada cuenta en el navegador del sistema (OAuth con
+redirección a 127.0.0.1; Google con PKCE). Credenciales y permisos se guardan **cifrados con el cifrado de Windows en
+`%APPDATA%\MetricaSEO Studio\publicar`**, nunca en la carpeta sincronizada: en el otro equipo hay que conectarlas otra vez.
+El permiso de LinkedIn dura 60 días; el de Google, 7 días mientras la app de Google Cloud esté en «Prueba».
+
+Lo verificado en la documentación oficial (cuotas, límites, versiones, requisitos para publicar como Página) está en
+[docs/publicar-redes.md](docs/publicar-redes.md). Pruebas: `npm run test:publicar`.
+
 ## Actualizaciones automáticas
 
 La app instalada se actualiza sola: al abrirse (a los 15 s), cada 3 horas mientras está abierta y en

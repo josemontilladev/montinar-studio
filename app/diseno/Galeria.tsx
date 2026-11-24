@@ -1,6 +1,6 @@
 /** «Mis diseños»: crear desde un formato y abrir, duplicar, renombrar o borrar los diseños guardados. */
 import { useEffect, useState, type ReactNode } from 'react';
-import { Clapperboard, Copy, FolderOpen, MoreHorizontal, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { Clapperboard, Copy, FolderOpen, MoreHorizontal, Pencil, Plus, Search, Send, Trash2 } from 'lucide-react';
 import { BotonTema } from './tema';
 import { Logo } from '../marca/Logo';
 import { FORMATOS } from './esquema';
@@ -48,6 +48,11 @@ export function Galeria({ onAbrir, onNuevo, onVideo, aviso }: { onAbrir: (id: st
         <button type="button" className="btn btn-ghost btn-sm gap-1.5" onClick={onVideo}>
           <Clapperboard className="size-4" /> Proyectos de vídeo
         </button>
+        {(window as any).studio?.escritorio && (
+          <button type="button" className="btn btn-ghost btn-sm gap-1.5" onClick={() => (location.href = '/publicar.html?desde=diseno')} data-ir-publicar>
+            <Send className="size-4" /> Publicar
+          </button>
+        )}
         <BotonTema />
         <button type="button" className="btn-marca" onClick={() => onNuevo()} data-nuevo-diseno>
           Nuevo diseño

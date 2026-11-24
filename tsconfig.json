@@ -16,5 +16,5 @@
       "@contrato/*": ["./contrato/*"]
     }
   },
-  "include": ["app/src", "app/diseno", "app/marca", "contrato", "servidor"]
+  "include": ["app/src", "app/diseno", "app/marca", "app/publicar", "contrato", "servidor"]
 }

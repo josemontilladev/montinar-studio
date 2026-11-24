@@ -20,6 +20,7 @@ import { acelElegida, registrarGpu } from './gpu';
 import { registrarInicio } from './inicio';
 import { registrarCompartida } from './compartida';
 import { registrarDisenos } from './disenos';
+import { registrarCentro } from './centro';
 import { listarMedios, nombreSeguro, ondas, PICOS_SEG, rutaPublica } from './medios';
 import { cancelarPreparacion, estadoEquipo, prepararEquipo, rutaModeloWhisper, type GrupoId } from './equipo';
 import { trabajoNode, actualizar, archivarToma, cancelar, listar, mostrarEnCarpeta, nuevo, publico as publicoT, pythonJSON, regenerarVoz, renderizar, suscribir, trabajoPython } from './trabajos';
@@ -131,6 +132,7 @@ registrarGpu(app, err);
 registrarInicio(app, err);
 registrarCompartida(app, err);
 registrarDisenos(app, err);
+registrarCentro(app);
 
 // ——— Música libre (original de la app, CC0): se copia al proyecto al usarla ———
 app.post('/api/musica-libre/usar', (req, res) => {
@@ -613,6 +615,8 @@ app.post('/api/mostrar', (req, res) => {
 
 app.use('/salidas', express.static(rutas.salidas));
 // estudio de diseño (segunda página de la interfaz)
+// publicar en redes (tercera página; solo hace algo en la app de escritorio)
+app.get('/publicar', (req, res) => res.redirect(`/publicar.html${req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''}`));
 app.get(['/diseno', '/disenos'], (req, res) => res.redirect(`/diseno.html${req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : ''}`));
 app.get('/__studio/icon.png', (_req, res) => res.sendFile(path.join(EDITOR, 'build', 'icon.png')));
 

@@ -4,7 +4,7 @@
  * - Archivo: Abrir proyecto…, Proyectos recientes, Guardar, Exportar, Abrir carpeta de salida, Dependencias.
  * - Una sola instancia; al salir se cierran el servidor y todos sus trabajos (render, voz, Python).
  */
-const { app, BrowserWindow, Menu, dialog, shell, nativeImage, ipcMain, Notification, desktopCapturer, session, nativeTheme } = require('electron');
+const { app, BrowserWindow, Menu, dialog, shell, nativeImage, ipcMain, Notification, desktopCapturer, session, nativeTheme, safeStorage, powerSaveBlocker } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const net = require('node:net');
@@ -61,6 +61,9 @@ let saliendo = false;
 let actualizador = null;
 const { crearActualizador } = require('./actualizar.cjs');
 let fuenteElegida = null;
+// Publicar en redes (YouTube y LinkedIn): electron/publicar; se crea al estar lista la app (safeStorage)
+const { crearPublicar } = require('./publicar/index.cjs');
+let publicar = null;
 
 // ——— una sola instancia ———
 if (!app.requestSingleInstanceLock()) {
@@ -156,6 +159,8 @@ const arrancarServidor = async (dir) => {
       STUDIO_COMPARTIDA: COMPARTIDA,
       STUDIO_DOCS_APP: DOCS,
       STUDIO_PROYECTOS: process.env.STUDIO_PROYECTOS ?? path.join(DOCS, 'Videos'),
+      // vista previa del panel Publicar: carpeta del centro de contenido de este equipo (servidor/centro.ts)
+      STUDIO_CENTRO: publicar?.carpetaCentro() ?? '',
       NODE_ENV: 'production',
     },
     windowsHide: true,
@@ -256,6 +261,12 @@ const irAInicio = async () => {
   ejecutarEnEditor("window.__ed.setState({ dialogo: 'inicio' })");
 };
 
+/** Panel «Publicar» (tercera página de la interfaz): guarda lo pendiente del editor antes de cambiar de página. */
+const irAPublicar = async (vista = '') => {
+  await ejecutarEnEditor('window.__guardar && window.__guardar()');
+  ventana?.loadURL(`http://127.0.0.1:${puerto}/publicar.html${vista ? `?vista=${vista}` : ''}`);
+};
+
 const abrirProyecto = async (dir) => {
   if (!dir) {
     const r = await dialog.showOpenDialog(ventana, { title: 'Abrir proyecto Remotion', properties: ['openDirectory'] });
@@ -304,6 +315,13 @@ const menu = () => {
         { type: 'separator' },
         { label: 'Abrir carpeta de diseños', click: () => { const d = path.join(DOCS, 'Diseños'); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
         { label: 'Abrir carpeta de exportaciones', click: () => { const d = path.join(app.getPath('downloads'), NOMBRE_APP); fs.mkdirSync(d, { recursive: true }); shell.openPath(d); } },
+      ],
+    },
+    {
+      label: 'Publicar',
+      submenu: [
+        { label: 'Publicar en YouTube y LinkedIn…', accelerator: 'CmdOrCtrl+Shift+P', click: () => irAPublicar() },
+        { label: 'Ajustes › Redes (conectar cuentas)…', click: () => irAPublicar('redes') },
       ],
     },
     {
@@ -399,6 +417,9 @@ ipcMain.handle('accion', async (_e, a, x) => {
   if (a === 'buscar-actualizaciones') return actualizador?.buscar() ?? null;
   if (a === 'instalar-actualizacion') return actualizador?.instalar() ?? false;
   if (a === 'mostrar-archivo') return x && fs.existsSync(x) ? shell.showItemInFolder(x) : false;
+  // publicar en redes: x = { op, ... } (ver electron/publicar/index.cjs)
+  if (a === 'publicar') return publicar ? publicar.manejar(x?.op, x ?? {}) : { error: 'Publicar aún no está listo.' };
+  if (a === 'ir-publicar') return irAPublicar(typeof x === 'string' ? x : '');
 });
 
 app.whenReady().then(async () => {
@@ -407,6 +428,13 @@ app.whenReady().then(async () => {
     const s = await desktopCapturer.getSources({ types: ['screen', 'window'] });
     const f = s.find((x) => x.id === fuenteElegida) ?? s[0];
     cb(f ? { video: f } : {});
+  });
+  publicar = crearPublicar({
+    electron: { safeStorage, shell, BrowserWindow, nativeImage, powerSaveBlocker },
+    datos: DATOS,
+    home: app.getPath('home'),
+    avisar: (e) => ejecutarEnEditor(`window.__publicar && window.__publicar(${JSON.stringify(e)})`),
+    notificar: ({ titulo, cuerpo }) => Notification.isSupported() && new Notification({ title: titulo, body: cuerpo, icon: ICONO }).show(),
   });
   pantallaCarga();
   // sin ningún proyecto de vídeo en este equipo (p. ej. la carpeta dev aún no se ha sincronizado) la app abre
@@ -436,6 +464,7 @@ app.whenReady().then(async () => {
 
 const cerrarTodo = () => {
   saliendo = true;
+  publicar?.cerrar();
   matarArbol(servidor);
 };
 app.on('before-quit', cerrarTodo);
